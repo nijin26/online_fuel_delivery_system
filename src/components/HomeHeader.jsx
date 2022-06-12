@@ -51,6 +51,7 @@ const HomeHeader = ({ links }) => {
       className={cx(classes.link, { [classes.linkActive]: active === link.link })}
       onClick={() => {
         setActive(link.link);
+        toggleOpened(false);
       }}
     >
       {link.label}
