@@ -58,7 +58,7 @@ const HomeHeader = ({ links }) => {
   ));
 
   return (
-    <Header height={60} mb={120} className={classes.root}>
+    <Header height={60} className={classes.root}>
       <Container className={classes.header}>
         <Group spacing={5} className={classes.links}>
           {items}
