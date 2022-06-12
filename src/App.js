@@ -21,6 +21,9 @@ function App() {
         <HomeHeader
           links={[
             { label: "Home", link: "/" },
+            { label: "Features", link: "/features" },
+            { label: "About", link: "/about" },
+            { label: "Contact Us", link: "/contactus" },
             { label: "Login", link: "/auth" },
           ]}
         />

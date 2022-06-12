@@ -1,28 +1,9 @@
 import React from "react";
-import { createStyles, Paper, Title, Text, TextInput, Button, Container, Group, Anchor, Center, Box } from "@mantine/core";
+import { Paper, Title, Text, TextInput, Button, Container, Group, Anchor, Center, Box } from "@mantine/core";
 import { ArrowLeft } from "tabler-icons-react";
 import { Link } from "react-router-dom";
 
-const useStyles = createStyles((theme) => ({
-  title: {
-    fontSize: 26,
-    fontWeight: 900,
-    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-  },
-
-  controls: {
-    [theme.fn.smallerThan("xs")]: {
-      flexDirection: "column-reverse",
-    },
-  },
-
-  control: {
-    [theme.fn.smallerThan("xs")]: {
-      width: "100%",
-      textAlign: "center",
-    },
-  },
-}));
+import { useStyles } from "../../styles/ForgotPassword";
 
 const ForgotPassword = () => {
   const { classes } = useStyles();
