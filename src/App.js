@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { Container, MantineProvider, ColorSchemeProvider, ColorScheme } from "@mantine/core";
+import React from "react";
+import { Container, MantineProvider, ColorSchemeProvider } from "@mantine/core";
 import { Routes, Route } from "react-router-dom";
+import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 
 //components
 import Home from "./pages/Home";
@@ -11,9 +12,14 @@ import ContactUs from "./pages/ContactUs";
 import Footer from "./components/Footer";
 
 function App() {
-  const [colorScheme, setColorScheme] = useState("light");
+  const [colorScheme, setColorScheme] = useLocalStorage({
+    key: "mantine-color-scheme",
+    defaultValue: "dark",
+    getInitialValueInEffect: true,
+  });
 
   const toggleColorScheme = (value) => setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+  useHotkeys([["mod+J", () => toggleColorScheme()]]);
 
   const myTheme = {
     colorScheme: colorScheme,
