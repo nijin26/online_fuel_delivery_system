@@ -1,7 +1,8 @@
 import React from "react";
 import { useForm, useToggle, upperFirst } from "@mantine/hooks";
-import { TextInput, PasswordInput, Text, Paper, Group, PaperProps, Button, Divider, Checkbox, Anchor } from "@mantine/core";
+import { TextInput, PasswordInput, Text, Paper, Group, Stack, Button, Divider, Checkbox, Anchor } from "@mantine/core";
 import { GoogleButton } from "../../images/GoogleIcon";
+import { Link } from "react-router-dom";
 
 const Authentication = (props) => {
   const [type, toggle] = useToggle("login", ["login", "register"]);
@@ -50,9 +51,19 @@ const Authentication = (props) => {
         </Group>
 
         <Group position="apart" mt="xl">
-          <Anchor component="button" type="button" color="gray" onClick={() => toggle()} size="xs">
-            {type === "register" ? "Already have an account? Login" : "Don't have an account? Register"}
-          </Anchor>
+          <Stack spacing="xs">
+            <Anchor component="button" type="button" color="gray" onClick={() => toggle()} size="xs">
+              {type === "register" ? "Already have an account? Login" : "Don't have an account? Register"}
+            </Anchor>
+            {type === "login" && (
+              <Link to="/forgotpassword">
+                <Anchor component="button" type="button" color="gray" size="xs">
+                  Forgot Password ?
+                </Anchor>
+              </Link>
+            )}
+          </Stack>
+
           <Button type="submit">{upperFirst(type)}</Button>
         </Group>
       </form>
