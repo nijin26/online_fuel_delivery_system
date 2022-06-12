@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 
 import { useStyles } from "../styles/HomeHeader";
 
+import ThemeToggle from "./ThemeToggle";
+
 const HomeHeader = ({ links }) => {
   const [opened, toggleOpened] = useBooleanToggle(false);
   const [active, setActive] = useState(links[0].link);
@@ -29,7 +31,7 @@ const HomeHeader = ({ links }) => {
         <Group spacing={5} className={classes.links}>
           {items}
         </Group>
-
+        <ThemeToggle />
         <Burger opened={opened} onClick={() => toggleOpened()} className={classes.burger} size="sm" />
       </Container>
     </Header>

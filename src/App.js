@@ -1,5 +1,5 @@
-import React from "react";
-import { Container, MantineProvider } from "@mantine/core";
+import React, { useState } from "react";
+import { Container, MantineProvider, ColorSchemeProvider, ColorScheme } from "@mantine/core";
 import { Routes, Route } from "react-router-dom";
 
 //components
@@ -10,25 +10,31 @@ import ForgotPassword from "./pages/Authentication/ForgotPassword";
 import ContactUs from "./pages/ContactUs";
 import Footer from "./components/Footer";
 
-const myTheme = {
-  colorScheme: "dark",
-  primaryColor: "green",
-};
-
 function App() {
+  const [colorScheme, setColorScheme] = useState("light");
+
+  const toggleColorScheme = (value) => setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+
+  const myTheme = {
+    colorScheme: colorScheme,
+    primaryColor: "green",
+  };
+
   return (
-    <MantineProvider theme={myTheme}>
-      <Container fluid maxWidth={false} style={{ padding: 0 }}>
-        <HomeHeader links={headerLinks} />
-        <Routes>
-          <Route exact path="/" element={<Home />} />
-          <Route exact path="/auth" element={<Authentication />} />
-          <Route exact path="/forgotpassword" element={<ForgotPassword />} />
-          <Route exact path="/contactus" element={<ContactUs />} />
-        </Routes>
-        <Footer links={footerLinks} />
-      </Container>
-    </MantineProvider>
+    <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+      <MantineProvider theme={myTheme}>
+        <Container fluid maxWidth={false} style={{ padding: 0 }}>
+          <HomeHeader links={headerLinks} />
+          <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route exact path="/auth" element={<Authentication />} />
+            <Route exact path="/forgotpassword" element={<ForgotPassword />} />
+            <Route exact path="/contactus" element={<ContactUs />} />
+          </Routes>
+          <Footer links={footerLinks} />
+        </Container>
+      </MantineProvider>
+    </ColorSchemeProvider>
   );
 }
 
