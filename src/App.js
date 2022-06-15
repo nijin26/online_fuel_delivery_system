@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import HomeHeader from "./components/HomeHeader";
 import UserAuth from "./pages/Authentication/UserAuth";
 import VendorAuth from "./pages/Authentication/VendorAuth";
+import AdminAuth from "./pages/Authentication/AdminAuth";
 import ForgotPassword from "./pages/Authentication/ForgotPassword";
 import ContactUs from "./pages/ContactUs";
 import Footer from "./components/Footer";
@@ -35,6 +36,7 @@ function App() {
           <HomeHeader links={headerLinks} />
           <Routes>
             <Route exact path="/" element={<Home />} />
+            <Route exact path="/adminauth" element={<AdminAuth />} />
             <Route exact path="/userauth" element={<UserAuth />} />
             <Route exact path="/vendorauth" element={<VendorAuth />} />
             <Route exact path="/forgotpassword" element={<ForgotPassword />} />
