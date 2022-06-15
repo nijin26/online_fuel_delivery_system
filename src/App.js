@@ -57,7 +57,8 @@ const headerLinks = [
   { label: "Features", link: "/features" },
   { label: "About", link: "/about" },
   { label: "Contact Us", link: "/contactus" },
-  { label: "Login", link: "/auth" },
+  { label: "User Login", link: "/userauth" },
+  { label: "Vendor Login", link: "/vendorauth" },
 ];
 
 const footerLinks = [
