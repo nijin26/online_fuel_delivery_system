@@ -10,23 +10,30 @@ const Authentication = (props) => {
     initialValues: {
       email: "",
       name: "",
+      mobileno: "",
       password: "",
-      terms: true,
+      terms: false,
     },
 
     validationRules: {
       email: (val) => /^\S+@\S+$/.test(val),
       password: (val) => val.length >= 6,
+      mobileno: (val) => val.length == 10,
     },
   });
 
   return (
     <Container size="sm" mt={30}>
       <Paper radius="md" p="xl" withBorder {...props}>
-        <Text size="lg" weight={500}>
-          Welcome to Online Fuel Delivery, {type} with
+        <Text size="xl" align="center" weight={700} transform="uppercase">
+          User {type === "register" ? "Registration" : "Login"}
         </Text>
 
+        <Divider my="xl" />
+
+        <Text size="lg" weight={500}>
+          Welcome {type === "login" && "back"} to Online Fuel Delivery, {type} with
+        </Text>
         <Group grow mb="md" mt="md">
           <GoogleButton radius="xl">Google</GoogleButton>
         </Group>
@@ -35,10 +42,18 @@ const Authentication = (props) => {
 
         <form onSubmit={form.onSubmit(() => {})}>
           <Group direction="column" grow>
-            {type === "register" && <TextInput label="Name" placeholder="Your name" value={form.values.name} onChange={(event) => form.setFieldValue("name", event.currentTarget.value)} />}
-
+            {type === "register" && <TextInput required label="Name" placeholder="Your name" value={form.values.name} onChange={(event) => form.setFieldValue("name", event.currentTarget.value)} />}
             <TextInput required label="Email" placeholder="hello@gmail.com" value={form.values.email} onChange={(event) => form.setFieldValue("email", event.currentTarget.value)} error={form.errors.email && "Invalid email"} />
-
+            {type === "register" && (
+              <TextInput
+                required
+                label="Mobile"
+                placeholder="Your Mobile Number"
+                value={form.values.name}
+                onChange={(event) => form.setFieldValue("mobileno", event.currentTarget.value)}
+                error={form.errors.mobileno && "Mobile Number should include 10 digits"}
+              />
+            )}
             <PasswordInput
               required
               label="Password"
@@ -56,6 +71,7 @@ const Authentication = (props) => {
               <Anchor component="button" type="button" color="gray" onClick={() => toggle()} size="xs">
                 {type === "register" ? "Already have an account? Login" : "Don't have an account? Register"}
               </Anchor>
+
               {type === "login" && (
                 <Link to="/forgotpassword">
                   <Anchor component="button" type="button" color="gray" size="xs">

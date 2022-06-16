@@ -6,10 +6,12 @@ import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 //components
 import Home from "./pages/Home";
 import HomeHeader from "./components/HomeHeader";
-import Authentication from "./pages/Authentication/Authentication";
+import UserAuth from "./pages/Authentication/UserAuth";
+import VendorAuth from "./pages/Authentication/VendorAuth";
 import ForgotPassword from "./pages/Authentication/ForgotPassword";
 import ContactUs from "./pages/ContactUs";
 import Footer from "./components/Footer";
+import Admin from "./pages/Admin/Admin";
 
 function App() {
   const [colorScheme, setColorScheme] = useLocalStorage({
@@ -33,9 +35,11 @@ function App() {
           <HomeHeader links={headerLinks} />
           <Routes>
             <Route exact path="/" element={<Home />} />
-            <Route exact path="/auth" element={<Authentication />} />
+            <Route exact path="/userauth" element={<UserAuth />} />
+            <Route exact path="/vendorauth" element={<VendorAuth />} />
             <Route exact path="/forgotpassword" element={<ForgotPassword />} />
             <Route exact path="/contactus" element={<ContactUs />} />
+            <Route exact path="/admin" element={<Admin />} />
           </Routes>
           <Footer links={footerLinks} />
         </Container>
