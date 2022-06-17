@@ -13,6 +13,7 @@ import ForgotPassword from "./pages/Authentication/ForgotPassword";
 import ContactUs from "./pages/ContactUs";
 import Footer from "./components/Footer";
 import Admin from "./pages/Admin/Admin";
+import InvalidURL from "./pages/InvalidURL";
 
 function App() {
   const [colorScheme, setColorScheme] = useLocalStorage({
@@ -42,6 +43,7 @@ function App() {
             <Route exact path="/forgotpassword" element={<ForgotPassword />} />
             <Route exact path="/contactus" element={<ContactUs />} />
             <Route exact path="/admin" element={<Admin />} />
+            <Route exact path="*" element={<InvalidURL />} />
           </Routes>
           <Footer links={footerLinks} />
         </Container>
