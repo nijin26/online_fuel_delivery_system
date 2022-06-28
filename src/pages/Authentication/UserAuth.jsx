@@ -127,7 +127,7 @@ const Authentication = (props) => {
     <Container size="sm" mt={30}>
       <Paper radius="md" p="xl" withBorder {...props}>
         <Text size="xl" align="center" weight={700} transform="uppercase">
-          User {type === "register" ? "Registration" : "Login"}
+          Customer {type === "register" ? "Registration" : "Login"}
         </Text>
 
         <Divider my="xl" />

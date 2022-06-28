@@ -20,7 +20,7 @@ const Auth = () => {
             <Text align="center" size="xl" weight={700}>
               <Link to="/userauth" className={classes.link}>
                 {" "}
-                User Login
+                Customer Login
               </Link>
             </Text>
           </Paper>
