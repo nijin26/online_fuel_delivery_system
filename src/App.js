@@ -6,6 +6,7 @@ import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 //components
 import Home from "./pages/Home";
 import HomeHeader from "./components/HomeHeader";
+import Auth from "./pages/Authentication/Auth";
 import UserAuth from "./pages/Authentication/UserAuth";
 import VendorAuth from "./pages/Authentication/VendorAuth";
 import AdminAuth from "./pages/Authentication/AdminAuth";
@@ -37,6 +38,7 @@ function App() {
           <HomeHeader links={headerLinks} />
           <Routes>
             <Route exact path="/" element={<Home />} />
+            <Route exact path="/auth" element={<Auth />} />
             <Route exact path="/adminauth" element={<AdminAuth />} />
             <Route exact path="/userauth" element={<UserAuth />} />
             <Route exact path="/vendorauth" element={<VendorAuth />} />
@@ -59,8 +61,7 @@ const headerLinks = [
   { label: "Features", link: "/features" },
   { label: "About", link: "/about" },
   { label: "Contact Us", link: "/contactus" },
-  { label: "User Login", link: "/userauth" },
-  { label: "Vendor Login", link: "/vendorauth" },
+  { label: "Login", link: "/auth" },
 ];
 
 const footerLinks = [
