@@ -71,7 +71,7 @@ function App() {
           <Container fluid style={{ padding: 0 }}>
             <HomeHeader links={headerLinks} handleLogout={handleLogout} isLoggedIn={user} />
             <Routes>
-              <Route path="/customer" element={<PrivateRoute user={user} />}>
+              <Route path="/customer" element={<PrivateRoute user={user} type="customer" />}>
                 <Route element={<Customer />} />
               </Route>
               <Route exact path="/" element={<Home />} />
@@ -97,7 +97,7 @@ export default App;
 
 const headerLinks = [
   { label: "Home", link: "/" },
-  { label: "Features", link: "/features" },
+  // { label: "Features", link: "/features" },
   { label: "About", link: "/about" },
   { label: "Contact Us", link: "/contactus" },
   { label: "Login", link: "/auth" },
