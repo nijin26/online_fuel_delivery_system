@@ -8,23 +8,40 @@ import { useStyles } from "../styles/HomeHeader";
 
 import ThemeToggle from "./ThemeToggle";
 
-const HomeHeader = ({ links }) => {
+const HomeHeader = ({ links, isLoggedIn, handleLogout }) => {
   const [opened, toggleOpened] = useBooleanToggle(false);
   const [active, setActive] = useState(links[0].link);
   const { classes, cx } = useStyles();
 
-  const items = links.map((link) => (
-    <Link
-      to={`${link.link}`}
-      className={cx(classes.link, { [classes.linkActive]: active === link.link })}
-      onClick={() => {
-        setActive(link.link);
-        toggleOpened(false);
-      }}
-    >
-      {link.label}
-    </Link>
-  ));
+  const items = links.map((link) => {
+    if (isLoggedIn !== null && link.label === "Login") {
+      return (
+        <Link
+          to="#"
+          className={classes.link}
+          onClick={() => {
+            handleLogout();
+            toggleOpened(false);
+          }}
+        >
+          Logout
+        </Link>
+      );
+    } else {
+      return (
+        <Link
+          to={`${link.link}`}
+          className={cx(classes.link, { [classes.linkActive]: active === link.link })}
+          onClick={() => {
+            setActive(link.link);
+            toggleOpened(false);
+          }}
+        >
+          {link.label}
+        </Link>
+      );
+    }
+  });
 
   return (
     <Header height={60} className={classes.root}>

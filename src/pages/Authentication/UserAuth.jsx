@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useForm, useToggle, upperFirst } from "@mantine/hooks";
 import { Container, TextInput, PasswordInput, Text, Paper, Group, Stack, Button, Divider, Checkbox, Anchor } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
@@ -6,11 +6,12 @@ import { GoogleButton } from "../../images/GoogleIcon";
 import { Link } from "react-router-dom";
 
 // Firebase
-import { auth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, sendEmailVerification } from "../../utils/firebaseConfig";
+import { auth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, sendEmailVerification } from "../../utils/firebaseConfig";
 import { useDispatch } from "react-redux";
 import { login } from "../../app/userSlice";
 
 const Authentication = (props) => {
+  const provider = new GoogleAuthProvider();
   const dispatch = useDispatch();
 
   const [type, toggle] = useToggle("login", ["login", "register"]);
@@ -30,6 +31,13 @@ const Authentication = (props) => {
     },
   });
 
+  const submitHandler = (e) => {
+    e.preventDefault();
+    console.log(type);
+    if (type === "register" && form.validate()) registerHandler();
+    else if (type == "login") loginHandler();
+  };
+
   const loginHandler = () => {
     signInWithEmailAndPassword(auth, form.values.email, form.values.password)
       .then((userAuth) => {
@@ -38,6 +46,7 @@ const Authentication = (props) => {
             email: userAuth.user.email,
             uid: userAuth.user.uid,
             displayName: userAuth.user.displayName,
+            phoneNumber: userAuth.user.phoneNumber,
           })
         );
         showNotification({
@@ -56,6 +65,7 @@ const Authentication = (props) => {
       .then((userAuth) => {
         updateProfile(userAuth.user, {
           displayName: form.values.name,
+          phoneNumber: form.values.mobileno,
         })
           .then(
             dispatch(
@@ -63,6 +73,7 @@ const Authentication = (props) => {
                 email: userAuth.user.email,
                 uid: userAuth.user.uid,
                 displayName: form.values.name,
+                phoneNumber: form.values.mobileno,
               })
             )
           )
@@ -82,11 +93,31 @@ const Authentication = (props) => {
       });
   };
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-    console.log(type);
-    if (type === "register" && form.validate()) registerHandler();
-    else if (type == "login") loginHandler();
+  const googleHandler = async () => {
+    await signInWithPopup(auth, provider)
+      .then((result) => {
+        // const credential = GoogleAuthProvider.credentialFromResult(result);
+        // const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        console.log(user, "user");
+        dispatch(
+          login({
+            email: user.email,
+            uid: user.uid,
+            displayName: user.displayName,
+            phoneNumber: user.phoneNumber,
+          })
+        );
+        showNotification({
+          title: "Google Authentication Successfull !",
+          message: `Hi ${user.displayName}, welcome back to our app.`,
+        });
+      })
+      .catch((error) => {
+        // const credential = GoogleAuthProvider.credentialFromError(error);
+        showNotification({ color: "red", title: `Google Authentication Failed ! ${error.message}`, message: "Please try again" });
+      });
   };
 
   return (
@@ -102,7 +133,9 @@ const Authentication = (props) => {
           Welcome {type === "login" && "back"} to Online Fuel Delivery, {type} with
         </Text>
         <Group grow mb="md" mt="md">
-          <GoogleButton radius="xl">Google</GoogleButton>
+          <GoogleButton radius="xl" onClick={googleHandler}>
+            Google
+          </GoogleButton>
         </Group>
 
         <Divider label="Or continue with email" labelPosition="center" my="lg" />

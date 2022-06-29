@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Container, MantineProvider, ColorSchemeProvider } from "@mantine/core";
-import { NotificationsProvider } from "@mantine/notifications";
+import { NotificationsProvider, showNotification } from "@mantine/notifications";
 import { Routes, Route } from "react-router-dom";
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 import { useDispatch, useSelector } from "react-redux";
@@ -55,12 +55,18 @@ function App() {
     });
   }, []);
 
+  const handleLogout = () => {
+    showNotification({ title: "You have Logout Successfully" });
+    auth.signOut();
+    dispatch(logout());
+  };
+
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
       <MantineProvider theme={myTheme}>
         <NotificationsProvider position="top-right" autoClose={4000}>
           <Container fluid maxWidth={false} style={{ padding: 0 }}>
-            <HomeHeader links={headerLinks} />
+            <HomeHeader links={headerLinks} handleLogout={handleLogout} isLoggedIn={user} />
             <Routes>
               <Route exact path="/" element={<Home />} />
               <Route exact path="/auth" element={<Auth />} />
