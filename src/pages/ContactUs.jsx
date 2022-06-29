@@ -1,17 +1,28 @@
 import React, { useState } from "react";
-import { Container, Paper, Text, TextInput, Textarea, Button, Group, SimpleGrid, createStyles } from "@mantine/core";
+import { Container, Paper, Text, TextInput, Textarea, Button, Group, SimpleGrid } from "@mantine/core";
 import { ContactIconsList } from "../components/ContactIconsList";
+import { showNotification } from "@mantine/notifications";
+import { Messages, MessagesOff } from "tabler-icons-react";
+import { useForm } from "@mantine/hooks";
 
 import { useStyles } from "../styles/ContactUs";
 
+// Firebase
 import { db } from "../utils/firebaseConfig";
 import { collection, addDoc } from "firebase/firestore";
 
 const ContactUs = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [subject, setSubject] = useState("");
-  const [message, setMessage] = useState("");
+  const form = useForm({
+    initialValues: {
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    },
+    validationRules: {
+      email: (val) => /^\S+@\S+$/.test(val),
+    },
+  });
 
   const { classes } = useStyles();
 
@@ -19,24 +30,25 @@ const ContactUs = () => {
     e.preventDefault();
     try {
       const docRef = await addDoc(collection(db, "contacts"), {
-        name,
-        email,
-        subject,
-        message,
+        ...form.values,
       });
-      clearState();
-      console.log("Document written with ID: ", docRef.id);
+      form.reset();
+      showNotification({
+        title: "Your message sent successfuly",
+        message: "Thank you for writing to us. We got your request and within 2 business days, we will get in touch. ",
+        autoClose: 6000,
+        color: "green",
+        icon: <Messages size={54} strokeWidth={1.5} color={"white"} />,
+      });
     } catch (e) {
-      console.error("Error adding document: ", e);
-      clearState();
+      showNotification({
+        title: "There is an error in sending your message",
+        message: "Please try again.",
+        autoClose: 6000,
+        color: "red",
+        icon: <MessagesOff size={54} strokeWidth={1.5} color={"#bf4940"} />,
+      });
     }
-  };
-
-  const clearState = () => {
-    setName("");
-    setEmail("");
-    setSubject("");
-    setMessage("");
   };
 
   return (
@@ -58,13 +70,13 @@ const ContactUs = () => {
 
             <div className={classes.fields}>
               <SimpleGrid cols={2} breakpoints={[{ maxWidth: "sm", cols: 1 }]}>
-                <TextInput label="Your name" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} />
-                <TextInput label="Your email" placeholder="hello@fueldev" required value={email} onChange={(e) => setEmail(e.target.value)} />
+                <TextInput label="Your name" placeholder="Your name" value={form.values.name} onChange={(e) => form.setFieldValue("name", e.currentTarget.value)} />
+                <TextInput label="Your email" placeholder="hello@fueldev" required value={form.values.email} onChange={(e) => form.setFieldValue("email", e.target.value)} />
               </SimpleGrid>
 
-              <TextInput mt="md" label="Subject" placeholder="Subject" required value={subject} onChange={(e) => setSubject(e.target.value)} />
+              <TextInput mt="md" label="Subject" placeholder="Subject" required value={form.values.subject} onChange={(e) => form.setFieldValue("subject", e.target.value)} />
 
-              <Textarea mt="md" label="Your message" placeholder="Please include all relevant information" minRows={3} value={message} onChange={(e) => setMessage(e.target.value)} />
+              <Textarea mt="md" label="Your message" placeholder="Please include all relevant information" minRows={3} value={form.values.message} onChange={(e) => form.setFieldValue("message", e.target.value)} />
 
               <Group position="right" mt="md">
                 <Button type="submit" className={classes.control} onClick={submitHandler}>

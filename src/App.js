@@ -1,5 +1,6 @@
 import React from "react";
 import { Container, MantineProvider, ColorSchemeProvider } from "@mantine/core";
+import { NotificationsProvider } from "@mantine/notifications";
 import { Routes, Route } from "react-router-dom";
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 
@@ -34,21 +35,23 @@ function App() {
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
       <MantineProvider theme={myTheme}>
-        <Container fluid maxWidth={false} style={{ padding: 0 }}>
-          <HomeHeader links={headerLinks} />
-          <Routes>
-            <Route exact path="/" element={<Home />} />
-            <Route exact path="/auth" element={<Auth />} />
-            <Route exact path="/adminauth" element={<AdminAuth />} />
-            <Route exact path="/userauth" element={<UserAuth />} />
-            <Route exact path="/vendorauth" element={<VendorAuth />} />
-            <Route exact path="/forgotpassword" element={<ForgotPassword />} />
-            <Route exact path="/contactus" element={<ContactUs />} />
-            <Route exact path="/admin" element={<Admin />} />
-            <Route exact path="*" element={<InvalidURL />} />
-          </Routes>
-          <Footer links={footerLinks} />
-        </Container>
+        <NotificationsProvider position="top-right">
+          <Container fluid maxWidth={false} style={{ padding: 0 }}>
+            <HomeHeader links={headerLinks} />
+            <Routes>
+              <Route exact path="/" element={<Home />} />
+              <Route exact path="/auth" element={<Auth />} />
+              <Route exact path="/adminauth" element={<AdminAuth />} />
+              <Route exact path="/userauth" element={<UserAuth />} />
+              <Route exact path="/vendorauth" element={<VendorAuth />} />
+              <Route exact path="/forgotpassword" element={<ForgotPassword />} />
+              <Route exact path="/contactus" element={<ContactUs />} />
+              <Route exact path="/admin" element={<Admin />} />
+              <Route exact path="*" element={<InvalidURL />} />
+            </Routes>
+            <Footer links={footerLinks} />
+          </Container>
+        </NotificationsProvider>
       </MantineProvider>
     </ColorSchemeProvider>
   );

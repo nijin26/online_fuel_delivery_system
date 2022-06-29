@@ -21,7 +21,6 @@ const Authentication = (props) => {
       mobileno: (val) => val.length == 10,
     },
   });
-
   return (
     <Container size="sm" mt={30}>
       <Paper radius="md" p="xl" withBorder {...props}>
@@ -42,16 +41,19 @@ const Authentication = (props) => {
 
         <form onSubmit={form.onSubmit(() => {})}>
           <Group direction="column" grow>
-            {type === "register" && <TextInput required label="Name" placeholder="Your name" value={form.values.name} onChange={(event) => form.setFieldValue("name", event.currentTarget.value)} />}
-            <TextInput required label="Email" placeholder="hello@gmail.com" value={form.values.email} onChange={(event) => form.setFieldValue("email", event.currentTarget.value)} error={form.errors.email && "Invalid email"} />
+            {type === "register" && <TextInput type="text" required label="Name" placeholder="Your name" value={form.values.name} onChange={(event) => form.setFieldValue("name", event.currentTarget.value)} />}
+
+            <TextInput required type="email" label="Email" placeholder="hello@gmail.com" value={form.values.email} onChange={(event) => form.setFieldValue("email", event.currentTarget.value)} error={form.errors.email && "Invalid email"} />
+
             {type === "register" && (
               <TextInput
                 required
+                type="number"
                 label="Mobile"
                 placeholder="Your Mobile Number"
-                value={form.values.name}
+                value={form.values.mobileno}
                 onChange={(event) => form.setFieldValue("mobileno", event.currentTarget.value)}
-                error={form.errors.mobileno && "Mobile Number should include 10 digits"}
+                error={form.errors.mobileno && "Mobile Number should contain 10 digits"}
               />
             )}
             <PasswordInput
