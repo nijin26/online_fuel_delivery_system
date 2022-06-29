@@ -16,6 +16,7 @@ import VendorAuth from "./pages/Authentication/VendorAuth";
 import AdminAuth from "./pages/Authentication/AdminAuth";
 import ForgotPassword from "./pages/Authentication/ForgotPassword";
 import ContactUs from "./pages/ContactUs";
+import AboutUs from "./pages/AboutUs";
 import Footer from "./components/Footer";
 import Admin from "./pages/Admin/Admin";
 import InvalidURL from "./pages/InvalidURL";
@@ -75,6 +76,7 @@ function App() {
               <Route exact path="/vendorauth" element={<VendorAuth />} />
               <Route exact path="/forgotpassword" element={<ForgotPassword />} />
               <Route exact path="/contactus" element={<ContactUs />} />
+              <Route exact path="/about" element={<AboutUs />} />
               <Route exact path="/admin" element={<Admin />} />
               <Route exact path="*" element={<InvalidURL />} />
             </Routes>
