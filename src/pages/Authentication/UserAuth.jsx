@@ -84,10 +84,9 @@ const Authentication = (props) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    if (form.validate()) {
-      if (type === "register") registerHandler();
-      else loginHandler();
-    }
+    console.log(type);
+    if (type === "register" && form.validate()) registerHandler();
+    else if (type == "login") loginHandler();
   };
 
   return (
@@ -152,7 +151,7 @@ const Authentication = (props) => {
               )}
             </Stack>
 
-            <Button type="submit" onClick={submitHandler} disabled={!form.values.terms}>
+            <Button type="submit" onClick={submitHandler} disabled={type === "register" && !form.values.terms}>
               {upperFirst(type)}
             </Button>
           </Group>
