@@ -20,7 +20,13 @@ export function EmailBanner({ submitHandler }) {
 
         <div className={classes.controls}>
           <TextInput type="email" value={email} onChange={(e) => setEmail(e.currentTarget.value)} placeholder="Your email" classNames={{ input: classes.input, root: classes.inputWrapper }} />
-          <Button className={classes.control} onClick={() => submitHandler(email)}>
+          <Button
+            className={classes.control}
+            onClick={() => {
+              submitHandler(email);
+              setEmail("");
+            }}
+          >
             Subscribe
           </Button>
         </div>

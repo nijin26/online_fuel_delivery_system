@@ -21,6 +21,8 @@ const ContactUs = () => {
     },
     validationRules: {
       email: (val) => /^\S+@\S+$/.test(val),
+      subject: (val) => val.length > 2,
+      message: (val) => val.length > 2,
     },
   });
 
@@ -29,17 +31,19 @@ const ContactUs = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      const docRef = await addDoc(collection(db, "contacts"), {
-        ...form.values,
-      });
-      form.reset();
-      showNotification({
-        title: "Your message sent successfuly",
-        message: "Thank you for writing to us. We got your request and within 2 business days, we will get in touch. ",
-        autoClose: 6000,
-        color: "green",
-        icon: <Messages size={54} strokeWidth={1.5} color={"white"} />,
-      });
+      if (form.validate()) {
+        const docRef = await addDoc(collection(db, "contacts"), {
+          ...form.values,
+        });
+        form.reset();
+        showNotification({
+          title: "Your message sent successfuly",
+          message: "Thank you for writing to us. We got your request and within 2 business days, we will get in touch. ",
+          autoClose: 6000,
+          color: "green",
+          icon: <Messages size={54} strokeWidth={1.5} color={"white"} />,
+        });
+      }
     } catch (e) {
       showNotification({
         title: "There is an error in sending your message",
@@ -71,12 +75,22 @@ const ContactUs = () => {
             <div className={classes.fields}>
               <SimpleGrid cols={2} breakpoints={[{ maxWidth: "sm", cols: 1 }]}>
                 <TextInput label="Your name" placeholder="Your name" value={form.values.name} onChange={(e) => form.setFieldValue("name", e.currentTarget.value)} />
-                <TextInput label="Your email" placeholder="hello@fueldev" required value={form.values.email} onChange={(e) => form.setFieldValue("email", e.target.value)} />
+
+                <TextInput label="Your email" placeholder="hello@fueldev" required value={form.values.email} onChange={(e) => form.setFieldValue("email", e.target.value)} error={form.errors.email && "Invalid email"} />
               </SimpleGrid>
 
-              <TextInput mt="md" label="Subject" placeholder="Subject" required value={form.values.subject} onChange={(e) => form.setFieldValue("subject", e.target.value)} />
+              <TextInput mt="md" label="Subject" placeholder="Subject" required value={form.values.subject} onChange={(e) => form.setFieldValue("subject", e.target.value)} error={form.errors.subject && "You must enter a Subject"} />
 
-              <Textarea mt="md" label="Your message" placeholder="Please include all relevant information" minRows={3} value={form.values.message} onChange={(e) => form.setFieldValue("message", e.target.value)} />
+              <Textarea
+                mt="md"
+                required
+                label="Your message"
+                placeholder="Please include all relevant information"
+                minRows={3}
+                value={form.values.message}
+                onChange={(e) => form.setFieldValue("message", e.target.value)}
+                error={form.errors.message && "You must add some message."}
+              />
 
               <Group position="right" mt="md">
                 <Button type="submit" className={classes.control} onClick={submitHandler}>
