@@ -44,6 +44,7 @@ const Authentication = (props) => {
           title: "Login Successfull !",
           message: `Hi ${userAuth.user.displayName}, welcome back to our app.`,
         });
+        form.reset();
       })
       .catch((err) => {
         showNotification({ color: "red", title: `Login Failed ! ${err.message}`, message: "Please try again" });
@@ -74,17 +75,19 @@ const Authentication = (props) => {
               })
             )
           );
+        toggle();
       })
       .catch((err) => {
-        showNotification({ color: "red", title: "Registration Failed !", message: "Please try again" });
-        console.log(err);
+        showNotification({ color: "red", title: `Registration Failed ! ${err.message}`, message: "Please try again" });
       });
   };
 
   const submitHandler = (e) => {
     e.preventDefault();
-    if (type === "register") registerHandler();
-    else loginHandler();
+    if (form.validate()) {
+      if (type === "register") registerHandler();
+      else loginHandler();
+    }
   };
 
   return (
@@ -149,7 +152,7 @@ const Authentication = (props) => {
               )}
             </Stack>
 
-            <Button type="submit" onClick={submitHandler}>
+            <Button type="submit" onClick={submitHandler} disabled={!form.values.terms}>
               {upperFirst(type)}
             </Button>
           </Group>
