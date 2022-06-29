@@ -47,6 +47,7 @@ const Authentication = (props) => {
             uid: userAuth.user.uid,
             displayName: userAuth.user.displayName,
             phoneNumber: userAuth.user.phoneNumber,
+            userType: "customer",
           })
         );
         showNotification({
@@ -74,6 +75,7 @@ const Authentication = (props) => {
                 uid: userAuth.user.uid,
                 displayName: form.values.name,
                 phoneNumber: form.values.mobileno,
+                userType: "customer",
               })
             )
           )
@@ -107,6 +109,7 @@ const Authentication = (props) => {
             uid: user.uid,
             displayName: user.displayName,
             phoneNumber: user.phoneNumber,
+            userType: "customer",
           })
         );
         showNotification({

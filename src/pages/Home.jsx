@@ -1,6 +1,9 @@
 import React from "react";
 import { Container, Title, Text, Button } from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
 import { Link } from "react-router-dom";
+
+import { db, addDoc, collection } from "../utils/firebaseConfig";
 
 import { useStyles } from "../styles/Home";
 
@@ -8,6 +11,20 @@ import { EmailBanner } from "../components/EmailBanner";
 
 const Home = () => {
   const { classes } = useStyles();
+
+  const newsLetterHandler = async (mail) => {
+    try {
+      if (/^\S+@\S+$/.test(mail)) {
+        const docRef = await addDoc(collection(db, "newsletter"), {
+          mail,
+        });
+        showNotification({ title: "Thank You!", message: "You have successfully subscribed to our newsletter." });
+      } else showNotification({ color: "red", title: "Enter a valid email address" });
+    } catch (e) {
+      showNotification({ color: "red", title: "Error in subscribing for newsletter", message: "Try Again." });
+    }
+  };
+
   return (
     <>
       <div className={classes.root}>
@@ -36,7 +53,7 @@ const Home = () => {
         </Container>
       </div>
       <Container mt={30}>
-        <EmailBanner />
+        <EmailBanner submitHandler={newsLetterHandler} />
       </Container>
     </>
   );

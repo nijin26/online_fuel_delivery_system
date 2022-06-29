@@ -4,7 +4,8 @@ import EmailBannerImage from "../images/EmailBannerImage.svg";
 
 import { useStyles } from "../styles/EmailBanner";
 
-export function EmailBanner() {
+export function EmailBanner({ submitHandler }) {
+  const [email, setEmail] = React.useState("");
   const { classes } = useStyles();
   return (
     <div className={classes.wrapper}>
@@ -18,8 +19,10 @@ export function EmailBanner() {
         </Text>
 
         <div className={classes.controls}>
-          <TextInput placeholder="Your email" classNames={{ input: classes.input, root: classes.inputWrapper }} />
-          <Button className={classes.control}>Subscribe</Button>
+          <TextInput type="email" value={email} onChange={(e) => setEmail(e.currentTarget.value)} placeholder="Your email" classNames={{ input: classes.input, root: classes.inputWrapper }} />
+          <Button className={classes.control} onClick={() => submitHandler(email)}>
+            Subscribe
+          </Button>
         </div>
       </div>
       <Image src={EmailBannerImage} className={classes.image} />
