@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Container, MantineProvider, ColorSchemeProvider } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
 import { Routes, Route } from "react-router-dom";
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
+import { useDispatch, useSelector } from "react-redux";
+import { login, logout, selectUser } from "./app/userSlice";
+import { auth, onAuthStateChanged } from "./utils/firebaseConfig";
 
 //components
 import Home from "./pages/Home";
@@ -18,6 +21,9 @@ import Admin from "./pages/Admin/Admin";
 import InvalidURL from "./pages/InvalidURL";
 
 function App() {
+  const user = useSelector(selectUser);
+  const dispatch = useDispatch();
+
   const [colorScheme, setColorScheme] = useLocalStorage({
     key: "mantine-color-scheme",
     defaultValue: "dark",
@@ -32,10 +38,27 @@ function App() {
     primaryColor: "green",
   };
 
+  useEffect(() => {
+    onAuthStateChanged(auth, (userAuth) => {
+      if (userAuth) {
+        // user is logged in, send the user's details to redux, store the current user in the state
+        dispatch(
+          login({
+            email: userAuth.email,
+            uid: userAuth.uid,
+            displayName: userAuth.displayName,
+          })
+        );
+      } else {
+        dispatch(logout());
+      }
+    });
+  }, []);
+
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
       <MantineProvider theme={myTheme}>
-        <NotificationsProvider position="top-right">
+        <NotificationsProvider position="top-right" autoClose={4000}>
           <Container fluid maxWidth={false} style={{ padding: 0 }}>
             <HomeHeader links={headerLinks} />
             <Routes>

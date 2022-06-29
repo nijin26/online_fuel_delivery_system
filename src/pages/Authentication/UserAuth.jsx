@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, useToggle, upperFirst } from "@mantine/hooks";
 import { Container, TextInput, PasswordInput, Text, Paper, Group, Stack, Button, Divider, Checkbox, Anchor } from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
 import { GoogleButton } from "../../images/GoogleIcon";
 import { Link } from "react-router-dom";
 
+// Firebase
+import { auth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, sendEmailVerification } from "../../utils/firebaseConfig";
+import { useDispatch } from "react-redux";
+import { login } from "../../app/userSlice";
+
 const Authentication = (props) => {
+  const dispatch = useDispatch();
+
   const [type, toggle] = useToggle("login", ["login", "register"]);
   const form = useForm({
     initialValues: {
@@ -21,6 +29,64 @@ const Authentication = (props) => {
       mobileno: (val) => val.length == 10,
     },
   });
+
+  const loginHandler = () => {
+    signInWithEmailAndPassword(auth, form.values.email, form.values.password)
+      .then((userAuth) => {
+        dispatch(
+          login({
+            email: userAuth.user.email,
+            uid: userAuth.user.uid,
+            displayName: userAuth.user.displayName,
+          })
+        );
+        showNotification({
+          title: "Login Successfull !",
+          message: `Hi ${userAuth.user.displayName}, welcome back to our app.`,
+        });
+      })
+      .catch((err) => {
+        showNotification({ color: "red", title: `Login Failed ! ${err.message}`, message: "Please try again" });
+      });
+  };
+
+  const registerHandler = () => {
+    createUserWithEmailAndPassword(auth, form.values.email, form.values.password)
+      .then((userAuth) => {
+        updateProfile(userAuth.user, {
+          displayName: form.values.name,
+        })
+          .then(
+            dispatch(
+              login({
+                email: userAuth.user.email,
+                uid: userAuth.user.uid,
+                displayName: form.values.name,
+              })
+            )
+          )
+          .then(
+            sendEmailVerification(userAuth.user).then(
+              showNotification({
+                color: "blue",
+                title: "Email Verification Sent !",
+                message: "Please check your inbox and verify your email address.",
+              })
+            )
+          );
+      })
+      .catch((err) => {
+        showNotification({ color: "red", title: "Registration Failed !", message: "Please try again" });
+        console.log(err);
+      });
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    if (type === "register") registerHandler();
+    else loginHandler();
+  };
+
   return (
     <Container size="sm" mt={30}>
       <Paper radius="md" p="xl" withBorder {...props}>
@@ -39,7 +105,7 @@ const Authentication = (props) => {
 
         <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
-        <form onSubmit={form.onSubmit(() => {})}>
+        <form onSubmit={form.onSubmit(submitHandler)}>
           <Group direction="column" grow>
             {type === "register" && <TextInput type="text" required label="Name" placeholder="Your name" value={form.values.name} onChange={(event) => form.setFieldValue("name", event.currentTarget.value)} />}
 
@@ -83,7 +149,9 @@ const Authentication = (props) => {
               )}
             </Stack>
 
-            <Button type="submit">{upperFirst(type)}</Button>
+            <Button type="submit" onClick={submitHandler}>
+              {upperFirst(type)}
+            </Button>
           </Group>
         </form>
       </Paper>
