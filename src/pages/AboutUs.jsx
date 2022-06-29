@@ -33,13 +33,6 @@ const AboutUs = () => {
 
 export default AboutUs;
 
-// const MemberCard = ({ name }) => {
-//   return (
-//     <Paper shadow={"lg"} radius="lg" p="xl" withBorder>
-//       <Text align="center">{name}</Text>
-//     </Paper>
-//   );
-// };
 const MemberCard = ({ name, avatar, email }) => {
   return (
     <Paper
