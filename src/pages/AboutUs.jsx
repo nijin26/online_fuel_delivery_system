@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Text, SimpleGrid, Paper } from "@mantine/core";
+import { Container, Text, SimpleGrid, Paper, Avatar, Button } from "@mantine/core";
 
 import { useStyles } from "../styles/AboutUs";
 
@@ -33,10 +33,34 @@ const AboutUs = () => {
 
 export default AboutUs;
 
-const MemberCard = ({ name }) => {
+// const MemberCard = ({ name }) => {
+//   return (
+//     <Paper shadow={"lg"} radius="lg" p="xl" withBorder>
+//       <Text align="center">{name}</Text>
+//     </Paper>
+//   );
+// };
+const MemberCard = ({ name, avatar, email }) => {
   return (
-    <Paper shadow={"lg"} radius="lg" p="xl" withBorder>
-      <Text align="center">{name}</Text>
+    <Paper
+      radius="md"
+      withBorder
+      p="lg"
+      sx={(theme) => ({
+        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.white,
+      })}
+    >
+      <Avatar src={avatar} size={120} radius={120} mx="auto" />
+      <Text align="center" size="lg" weight={500} mt="md">
+        {name}
+      </Text>
+      <Text align="center" color="dimmed" size="sm">
+        {email}
+      </Text>
+
+      <Button variant="default" mt="md" fullWidth>
+        Contact
+      </Button>
     </Paper>
   );
 };
