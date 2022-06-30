@@ -3,7 +3,7 @@ import { useForm, useToggle, upperFirst } from "@mantine/hooks";
 import { Container, TextInput, PasswordInput, Text, Paper, Group, Stack, Button, Divider, Checkbox, Anchor } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { GoogleButton } from "../../images/GoogleIcon";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Firebase
 import { auth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, sendEmailVerification } from "../../utils/firebaseConfig";
@@ -13,6 +13,7 @@ import { login } from "../../app/userSlice";
 const Authentication = (props) => {
   const provider = new GoogleAuthProvider();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [type, toggle] = useToggle("login", ["login", "register"]);
   const form = useForm({
@@ -61,6 +62,7 @@ const Authentication = (props) => {
           message: `Hi ${userAuth.user.displayName}, welcome back to our app.`,
         });
         form.reset();
+        navigate("/vendor");
       })
       .catch((err) => {
         showNotification({ color: "red", title: `Login Failed ! ${err.message}`, message: "Please try again" });
@@ -122,6 +124,7 @@ const Authentication = (props) => {
           title: "Google Authentication Successfull !",
           message: `Hi ${user.displayName}, welcome back to our app.`,
         });
+        navigate("/vendor");
       })
       .catch((error) => {
         // const credential = GoogleAuthProvider.credentialFromError(error);

@@ -1,24 +1,21 @@
 import React from "react";
 import { Container, Paper, Text, Group } from "@mantine/core";
 
-import { useStyles } from "../../styles/Customer";
+import { useStyles } from "../../styles/Vendor";
 
-const Customer = () => {
+const Vendor = () => {
   const { classes } = useStyles();
 
   return (
     <Container size={"md"}>
       <Paper className={classes.container} radius="lg" p="xl" my="xl">
         <Text size="xl" weight={600} align="center" transform="uppercase">
-          Order Fuel
+          Vendor
         </Text>
-        <Group position="center" spacing="xl" my={"lg"}>
-          <div>Diesel</div>
-          <div>Petrol</div>
-        </Group>
+        <Group position="center" spacing="xl" my={"lg"}></Group>
       </Paper>
     </Container>
   );
 };
 
-export default Customer;
+export default Vendor;

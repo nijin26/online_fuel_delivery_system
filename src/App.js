@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Container, MantineProvider, ColorSchemeProvider } from "@mantine/core";
 import { NotificationsProvider, showNotification } from "@mantine/notifications";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 import { useDispatch, useSelector } from "react-redux";
 import { login, logout, selectUser } from "./app/userSlice";
@@ -21,11 +21,13 @@ import AboutUs from "./pages/AboutUs";
 import Footer from "./components/Footer";
 import Admin from "./pages/Admin/Admin";
 import Customer from "./pages/Customer/Customer";
+import Vendor from "./pages/Vendor/Vendor";
 import InvalidURL from "./pages/InvalidURL";
 
 function App() {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [colorScheme, setColorScheme] = useLocalStorage({
     key: "mantine-color-scheme",
@@ -71,8 +73,11 @@ function App() {
           <Container fluid style={{ padding: 0 }}>
             <HomeHeader links={headerLinks} handleLogout={handleLogout} isLoggedIn={user} />
             <Routes>
-              <Route path="/customer" element={<PrivateRoute user={user} type="customer" />}>
-                <Route element={<Customer />} />
+              <Route element={<PrivateRoute user={user} type="customer" />}>
+                <Route path="/customer" element={<Customer />} />
+              </Route>
+              <Route element={<PrivateRoute user={user} type="vendor" />}>
+                <Route path="/vendor" element={<Vendor />} />
               </Route>
               <Route exact path="/" element={<Home />} />
               <Route exact path="/auth" element={<Auth />} />
