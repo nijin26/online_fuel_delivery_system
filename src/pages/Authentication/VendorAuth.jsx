@@ -30,7 +30,7 @@ const Authentication = (props) => {
     validationRules: {
       email: (val) => /^\S+@\S+$/.test(val),
       password: (val) => val.length >= 6,
-      mobileno: (val) => val.length == 10,
+      mobileno: (val) => val.length === 10,
     },
   });
 
@@ -38,7 +38,7 @@ const Authentication = (props) => {
     e.preventDefault();
     console.log(type);
     if (type === "register" && form.validate()) registerHandler();
-    else if (type == "login") loginHandler();
+    else if (type === "login") loginHandler();
   };
 
   const loginHandler = () => {

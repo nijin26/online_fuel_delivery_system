@@ -1,6 +1,6 @@
 import React from "react";
-import { useForm, useToggle, upperFirst } from "@mantine/hooks";
-import { Container, TextInput, PasswordInput, Text, Paper, Group, Stack, Button, Divider, Checkbox, Anchor } from "@mantine/core";
+import { useForm } from "@mantine/hooks";
+import { Container, TextInput, PasswordInput, Text, Paper, Group, Stack, Button, Divider, Anchor } from "@mantine/core";
 import { GoogleButton } from "../../images/GoogleIcon";
 import { Link } from "react-router-dom";
 

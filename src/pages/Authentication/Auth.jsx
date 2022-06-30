@@ -1,6 +1,5 @@
 import React from "react";
 import { Container, Paper, Grid, Text } from "@mantine/core";
-import { ArrowBarRight } from "tabler-icons-react";
 
 import { Link } from "react-router-dom";
 import { useStyles } from "../../styles/Auth";

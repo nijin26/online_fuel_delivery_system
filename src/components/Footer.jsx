@@ -2,6 +2,7 @@ import React from "react";
 import { Anchor, Group, ActionIcon } from "@mantine/core";
 import { BrandTwitter, BrandYoutube, BrandInstagram } from "tabler-icons-react";
 // import { MantineLogo } from "../../shared/MantineLogo";
+import { Link } from "react-router-dom";
 
 import { useStyles } from "../styles/Footer";
 
@@ -26,7 +27,9 @@ const Footer = ({ links }) => {
             <BrandYoutube size={18} />
           </ActionIcon>
           <ActionIcon size="lg">
-            <BrandInstagram size={18} />
+            <Link to="/customer">
+              <BrandInstagram size={18} />
+            </Link>
           </ActionIcon>
         </Group>
       </div>

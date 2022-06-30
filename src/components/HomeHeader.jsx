@@ -17,6 +17,7 @@ const HomeHeader = ({ links, isLoggedIn, handleLogout }) => {
     if (isLoggedIn !== null && link.label === "Login") {
       return (
         <Link
+          key={link.label}
           to="#"
           className={classes.link}
           onClick={() => {
@@ -30,6 +31,7 @@ const HomeHeader = ({ links, isLoggedIn, handleLogout }) => {
     } else {
       return (
         <Link
+          key={link.label}
           to={`${link.link}`}
           className={cx(classes.link, { [classes.linkActive]: active === link.link })}
           onClick={() => {

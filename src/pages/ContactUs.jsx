@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Container, Paper, Text, TextInput, Textarea, Button, Group, SimpleGrid } from "@mantine/core";
 import { ContactIconsList } from "../components/ContactIconsList";
 import { showNotification } from "@mantine/notifications";
@@ -32,7 +32,7 @@ const ContactUs = () => {
     e.preventDefault();
     try {
       if (form.validate()) {
-        const docRef = await addDoc(collection(db, "contacts"), {
+        await addDoc(collection(db, "contacts"), {
           ...form.values,
         });
         form.reset();

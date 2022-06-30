@@ -8,6 +8,7 @@ import { login, logout, selectUser } from "./app/userSlice";
 import { auth, onAuthStateChanged } from "./utils/firebaseConfig";
 
 //components
+import { PrivateRoute } from "./utils/PrivateRoute";
 import Home from "./pages/Home";
 import HomeHeader from "./components/HomeHeader";
 import Auth from "./pages/Authentication/Auth";
@@ -19,6 +20,7 @@ import ContactUs from "./pages/ContactUs";
 import AboutUs from "./pages/AboutUs";
 import Footer from "./components/Footer";
 import Admin from "./pages/Admin/Admin";
+import Customer from "./pages/Customer/Customer";
 import InvalidURL from "./pages/InvalidURL";
 
 function App() {
@@ -66,9 +68,12 @@ function App() {
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
       <MantineProvider theme={myTheme}>
         <NotificationsProvider position="top-right" autoClose={4000}>
-          <Container fluid maxWidth={false} style={{ padding: 0 }}>
+          <Container fluid style={{ padding: 0 }}>
             <HomeHeader links={headerLinks} handleLogout={handleLogout} isLoggedIn={user} />
             <Routes>
+              <Route path="/customer" element={<PrivateRoute user={user} />}>
+                <Route element={<Customer />} />
+              </Route>
               <Route exact path="/" element={<Home />} />
               <Route exact path="/auth" element={<Auth />} />
               <Route exact path="/adminauth" element={<AdminAuth />} />

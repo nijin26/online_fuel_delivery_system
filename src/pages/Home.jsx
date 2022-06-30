@@ -15,7 +15,7 @@ const Home = () => {
   const newsLetterHandler = async (mail) => {
     try {
       if (/^\S+@\S+$/.test(mail)) {
-        const docRef = await addDoc(collection(db, "newsletter"), {
+        await addDoc(collection(db, "newsletter"), {
           mail,
         });
         showNotification({ title: "Thank You!", message: "You have successfully subscribed to our newsletter." });
