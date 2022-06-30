@@ -8,7 +8,6 @@ import { login, logout, selectUser } from "./app/userSlice";
 import { auth, onAuthStateChanged } from "./utils/firebaseConfig";
 
 //components
-import PrivateRoute from "./utils/PrivateRoute";
 import Home from "./pages/Home";
 import HomeHeader from "./components/HomeHeader";
 import Auth from "./pages/Authentication/Auth";
@@ -23,6 +22,7 @@ import Admin from "./pages/Admin/Admin";
 import Customer from "./pages/Customer/Customer";
 import Vendor from "./pages/Vendor/Vendor";
 import InvalidURL from "./pages/InvalidURL";
+import ProtectedRoute from "./utils/ProtectedRoute";
 
 function App() {
   const user = useSelector(selectUser);
@@ -72,10 +72,10 @@ function App() {
           <Container fluid style={{ padding: 0 }}>
             <HomeHeader links={headerLinks} handleLogout={handleLogout} isLoggedIn={user} />
             <Routes>
-              <Route element={<PrivateRoute user={user} type="customer" />}>
+              <Route element={<ProtectedRoute user={user} type="customer" />}>
                 <Route path="/customer" element={<Customer />} />
               </Route>
-              <Route element={<PrivateRoute user={user} type="vendor" />}>
+              <Route element={<ProtectedRoute user={user} type="vendor" />}>
                 <Route path="/vendor" element={<Vendor />} />
               </Route>
               <Route exact path="/" element={<Home />} />
