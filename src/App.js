@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import { Container, MantineProvider, ColorSchemeProvider } from "@mantine/core";
 import { NotificationsProvider, showNotification } from "@mantine/notifications";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 import { useDispatch, useSelector } from "react-redux";
 import { login, logout, selectUser } from "./app/userSlice";
 import { auth, onAuthStateChanged } from "./utils/firebaseConfig";
 
 //components
-import { PrivateRoute } from "./utils/PrivateRoute";
+import PrivateRoute from "./utils/PrivateRoute";
 import Home from "./pages/Home";
 import HomeHeader from "./components/HomeHeader";
 import Auth from "./pages/Authentication/Auth";
@@ -27,7 +27,6 @@ import InvalidURL from "./pages/InvalidURL";
 function App() {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const [colorScheme, setColorScheme] = useLocalStorage({
     key: "mantine-color-scheme",
