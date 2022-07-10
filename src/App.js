@@ -72,12 +72,10 @@ function App() {
           <Container fluid style={{ padding: 0 }}>
             <HomeHeader links={headerLinks} handleLogout={handleLogout} isLoggedIn={user} />
             <Routes>
-              <Route element={<ProtectedRoute user={user} type="customer" />}>
-                <Route path="/customer" element={<Customer />} />
-              </Route>
-              <Route element={<ProtectedRoute user={user} type="vendor" />}>
-                <Route path="/vendor" element={<Vendor />} />
-              </Route>
+              <Route element={<ProtectedRoute user={user} type="customer" />}></Route>
+              <Route element={<ProtectedRoute user={user} type="vendor" />}></Route>
+              <Route path="/customer" element={<Customer />} />
+              <Route path="/vendor" element={<Vendor />} />
               <Route exact path="/" element={<Home />} />
               <Route exact path="/auth" element={<Auth />} />
               <Route exact path="/adminauth" element={<AdminAuth />} />
