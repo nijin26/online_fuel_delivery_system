@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Container, MantineProvider, ColorSchemeProvider } from "@mantine/core";
 import { NotificationsProvider, showNotification } from "@mantine/notifications";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 import { useDispatch, useSelector } from "react-redux";
 import { login, logout, selectUser } from "./app/userSlice";
@@ -14,18 +14,21 @@ import Auth from "./pages/Authentication/Auth";
 import UserAuth from "./pages/Authentication/UserAuth";
 import VendorAuth from "./pages/Authentication/VendorAuth";
 import AdminAuth from "./pages/Authentication/AdminAuth";
+import DeliveryStaffAuth from "./pages/Authentication/DeliveryStaffAuth";
 import ForgotPassword from "./pages/Authentication/ForgotPassword";
 import ContactUs from "./pages/ContactUs";
 import AboutUs from "./pages/AboutUs";
 import Footer from "./components/Footer";
 import Admin from "./pages/Admin/Admin";
 import Customer from "./pages/Customer/Customer";
+import DeliveryStaff from "./pages/DeliveryStaff/DeliveryStaff";
 import Vendor from "./pages/Vendor/Vendor";
 import InvalidURL from "./pages/InvalidURL";
 import ProtectedRoute from "./utils/ProtectedRoute";
 
 function App() {
   const user = useSelector(selectUser);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [colorScheme, setColorScheme] = useLocalStorage({
@@ -63,6 +66,7 @@ function App() {
     showNotification({ title: "You have Logout Successfully" });
     auth.signOut();
     dispatch(logout());
+    navigate("/auth", { replace: true });
   };
 
   return (
@@ -76,11 +80,13 @@ function App() {
               <Route element={<ProtectedRoute user={user} type="vendor" />}></Route>
               <Route path="/customer" element={<Customer />} />
               <Route path="/vendor" element={<Vendor />} />
+              <Route path="/deliverystaff" element={<DeliveryStaff />} />
               <Route exact path="/" element={<Home />} />
               <Route exact path="/auth" element={<Auth />} />
               <Route exact path="/adminauth" element={<AdminAuth />} />
               <Route exact path="/userauth" element={<UserAuth />} />
               <Route exact path="/vendorauth" element={<VendorAuth />} />
+              <Route exact path="/deliverystaffauth" element={<DeliveryStaffAuth />} />
               <Route exact path="/forgotpassword" element={<ForgotPassword />} />
               <Route exact path="/contactus" element={<ContactUs />} />
               <Route exact path="/about" element={<AboutUs />} />

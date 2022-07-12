@@ -2,7 +2,7 @@ import { createStyles } from "@mantine/core";
 
 export const useStyles = createStyles((theme) => ({
   container: {
-    height: "50vh",
+    minHeight: "50vh",
   },
   group: {
     "& > div": {
@@ -18,5 +18,12 @@ export const useStyles = createStyles((theme) => ({
     backgroundColor: "#87D1FC ",
     color: "black",
     borderColor: "blue",
+  },
+  fuelquantity: {
+    width: "60%",
+    margin: "0 auto",
+    [`@media (max-width: ${theme.breakpoints.xs}px)`]: {
+      width: "90%",
+    },
   },
 }));
