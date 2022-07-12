@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Paper, Text, Group, NumberInput, SimpleGrid, Badge, Stack } from "@mantine/core";
+import { Container, Paper, Text, Group, Button, NumberInput, SimpleGrid, Badge, Stack } from "@mantine/core";
 // import { GoogleMap, LoadScript } from "@react-google-maps/api";
 import Map from "../../components/Map";
 
@@ -78,6 +78,7 @@ const Customer = () => {
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
           ></iframe>
+          <Button>Order Now</Button>
         </Stack>
       </Paper>
     </Container>
