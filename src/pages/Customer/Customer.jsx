@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Paper, Text, Group, NumberInput, SimpleGrid, Badge, Stack } from "@mantine/core";
 // import { GoogleMap, LoadScript } from "@react-google-maps/api";
+import Map from "../../components/Map";
 
 import { useStyles } from "../../styles/Customer";
 
@@ -9,18 +10,28 @@ const Customer = () => {
   const [fuel, setFuel] = useState("petrol");
   const [quantity, setQuantity] = useState(3);
   const [selectedQuantity, setSelectedQuantity] = useState(3);
-  const [center, setCenter] = useState({ lat: 8.4998965, lng: 76.8541261 });
+  const [coords, setCoords] = useState({});
+  const [bounds, setBounds] = useState(null);
+  const [autocomplete, setAutocomplete] = useState(null);
+  const [childClicked, setChildClicked] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const quantityList = [3, 5, 8, 10];
 
   // useEffect(() => {
-  //   navigator.geolocation.getCurrentPosition(function(position) {
-  //     setCenter({ lat: position.coords.latitude, lng: position.coords.longitude });
-
-  //     // console.log("Latitude is :",position.coords.latitude );
-  //     // console.log("Longitude is :", position.coords.longitude);
+  //   navigator.geolocation.getCurrentPosition(({ cords }) => {
+  //     setCoords({ lat: cords.latitude, lng: cords.longitude });
   //   });
   // }, []);
+
+  // const onLoad = (autoC) => setAutocomplete(autoC);
+
+  // const onPlaceChanged = () => {
+  //   const lat = autocomplete.getPlace().geometry.location.lat();
+  //   const lng = autocomplete.getPlace().geometry.location.lng();
+
+  //   setCoords({ lat, lng });
+  // };
 
   return (
     <Container size={"md"}>
@@ -59,6 +70,14 @@ const Customer = () => {
               </Badge>
             ))}
           </SimpleGrid>
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.754795644414!2d76.69351641460398!3d8.994696192002317!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b06090686f77575%3A0x46abecda8aa0155d!2sThangal%20Kunju%20Musaliar%20Institute%20of%20Technology!5e0!3m2!1sen!2sin!4v1657652641806!5m2!1sen!2sin"
+            height={450}
+            style={{ border: 0 }}
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
         </Stack>
       </Paper>
     </Container>
@@ -66,3 +85,5 @@ const Customer = () => {
 };
 
 export default Customer;
+
+// <Map setChildClicked={setChildClicked} coords={coords} setBounds={setBounds} setCoords={setCoords} />
