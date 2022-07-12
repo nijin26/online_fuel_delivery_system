@@ -4,7 +4,7 @@ import { Container, Paper, Grid, Text } from "@mantine/core";
 import { Link } from "react-router-dom";
 import { useStyles } from "../../styles/Auth";
 
-import user from "../../images/user.png";
+import customer from "../../images/customer.png";
 import vendor from "../../images/vendor.png";
 
 const Auth = () => {
@@ -15,7 +15,7 @@ const Auth = () => {
       <Grid gutter="sm">
         <Grid.Col sm={6} xs={12}>
           <Paper shadow="xs" p="md" className={classes.paper}>
-            <img src={user} alt="" className={classes.image} />
+            <img src={customer} alt="" className={classes.image} />
             <Text align="center" size="xl" weight={700}>
               <Link to="/userauth" className={classes.link}>
                 {" "}
