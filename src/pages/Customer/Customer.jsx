@@ -72,7 +72,7 @@ const Customer = () => {
           </SimpleGrid>
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.754795644414!2d76.69351641460398!3d8.994696192002317!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b06090686f77575%3A0x46abecda8aa0155d!2sThangal%20Kunju%20Musaliar%20Institute%20of%20Technology!5e0!3m2!1sen!2sin!4v1657652641806!5m2!1sen!2sin"
-            height={450}
+            height={250}
             style={{ border: 0 }}
             allowfullscreen=""
             loading="lazy"
