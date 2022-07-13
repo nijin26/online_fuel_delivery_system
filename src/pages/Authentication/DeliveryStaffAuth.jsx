@@ -6,7 +6,7 @@ import { GoogleButton } from "../../images/GoogleIcon";
 import { Link, useNavigate } from "react-router-dom";
 
 // Firebase
-import { auth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, sendEmailVerification } from "../../utils/firebaseConfig";
+import { auth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, sendEmailVerification, setDoc, doc, db } from "../../utils/firebaseConfig";
 import { useDispatch } from "react-redux";
 import { login } from "../../app/userSlice";
 
@@ -70,17 +70,17 @@ const Authentication = (props) => {
           displayName: form.values.name,
           phoneNumber: form.values.mobileno,
         })
-          .then(
-            dispatch(
-              login({
-                email: userAuth.user.email,
-                uid: userAuth.user.uid,
-                displayName: form.values.name,
-                phoneNumber: form.values.mobileno,
-                userType: "customer",
-              })
-            )
-          )
+          .then(() => {
+            const deliveryStaffData = {
+              email: userAuth.user.email,
+              uid: userAuth.user.uid,
+              displayName: form.values.name,
+              phoneNumber: form.values.mobileno,
+              userType: "deliverystaff",
+            };
+            addDeliveryStaffToDB(userAuth.user.uid, deliveryStaffData);
+            dispatch(login(deliveryStaffData));
+          })
           .then(
             sendEmailVerification(userAuth.user).then(
               showNotification({
@@ -124,6 +124,14 @@ const Authentication = (props) => {
         // const credential = GoogleAuthProvider.credentialFromError(error);
         showNotification({ color: "red", title: `Google Authentication Failed ! ${error.message}`, message: "Please try again" });
       });
+  };
+
+  const addDeliveryStaffToDB = async (docId, data) => {
+    try {
+      await setDoc(doc(db, "deliverystaff", docId), data);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
   };
 
   return (
