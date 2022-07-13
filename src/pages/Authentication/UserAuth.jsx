@@ -34,7 +34,6 @@ const Authentication = (props) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log(type, "userAuth");
     if (type === "register" && form.validate()) registerHandler();
     else if (type === "login") loginHandler();
   };
