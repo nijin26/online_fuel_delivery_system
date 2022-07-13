@@ -80,10 +80,10 @@ const Authentication = (props) => {
         })
           .then(() => {
             const vendorData = {
-              email: userAuth.user.email,
+              email: form.values.email,
               uid: userAuth.user.uid,
-              displayName: userAuth.user.displayName,
-              phoneNumber: userAuth.user.phoneNumber,
+              displayName: form.values.name,
+              phoneNumber: form.values.mobileno,
               userType: "vendor",
               fuelStationsName: form.values.fuelStationsName,
               city: form.values.city,
