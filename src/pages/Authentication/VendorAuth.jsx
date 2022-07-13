@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useDeferredValue } from "react";
 import { useForm, useToggle, upperFirst } from "@mantine/hooks";
 import { Container, TextInput, PasswordInput, Text, Paper, Group, Stack, Button, Divider, Checkbox, Anchor } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
@@ -6,7 +6,7 @@ import { GoogleButton } from "../../images/GoogleIcon";
 import { Link, useNavigate } from "react-router-dom";
 
 // Firebase
-import { auth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, sendEmailVerification } from "../../utils/firebaseConfig";
+import { auth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, sendEmailVerification, setDoc, doc, db } from "../../utils/firebaseConfig";
 import { useDispatch } from "react-redux";
 import { login } from "../../app/userSlice";
 
@@ -14,6 +14,8 @@ const Authentication = (props) => {
   const provider = new GoogleAuthProvider();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  React.useEffect(() => console.log("I am in Vendor Page"), []);
 
   const [type, toggle] = useToggle("login", ["login", "register"]);
   const form = useForm({
@@ -76,20 +78,20 @@ const Authentication = (props) => {
           displayName: form.values.name,
           phoneNumber: form.values.mobileno,
         })
-          .then(
-            dispatch(
-              login({
-                email: userAuth.user.email,
-                uid: userAuth.user.uid,
-                displayName: userAuth.user.displayName,
-                phoneNumber: userAuth.user.phoneNumber,
-                userType: "vendor",
-                fuelStationsName: form.values.fuelStationsName,
-                city: form.values.city,
-                state: form.values.state,
-              })
-            )
-          )
+          .then(() => {
+            const vendorData = {
+              email: userAuth.user.email,
+              uid: userAuth.user.uid,
+              displayName: userAuth.user.displayName,
+              phoneNumber: userAuth.user.phoneNumber,
+              userType: "vendor",
+              fuelStationsName: form.values.fuelStationsName,
+              city: form.values.city,
+              state: form.values.state,
+            };
+            addVendorToDB(userAuth.user.uid, vendorData);
+            dispatch(login(vendorData));
+          })
           .then(
             sendEmailVerification(userAuth.user).then(
               showNotification({
@@ -130,6 +132,14 @@ const Authentication = (props) => {
         // const credential = GoogleAuthProvider.credentialFromError(error);
         showNotification({ color: "red", title: `Google Authentication Failed ! ${error.message}`, message: "Please try again" });
       });
+  };
+
+  const addVendorToDB = async (docId, data) => {
+    try {
+      await setDoc(doc(db, "vendors", docId), data);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
   };
 
   return (
