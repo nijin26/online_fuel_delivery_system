@@ -7,9 +7,9 @@ import { GoogleButton } from "../../images/GoogleIcon";
 import { Link, useNavigate } from "react-router-dom";
 
 // Firebase
-import { auth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, sendEmailVerification, setDoc, doc, db } from "../../utils/firebaseConfig";
+import { getDocs, collection, auth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, sendEmailVerification, setDoc, doc, db } from "../../utils/firebaseConfig";
 import { useDispatch } from "react-redux";
-import { login } from "../../app/userSlice";
+import { login, logout } from "../../app/userSlice";
 
 const Authentication = (props) => {
   const provider = new GoogleAuthProvider();
@@ -41,22 +41,37 @@ const Authentication = (props) => {
 
   const loginHandler = () => {
     signInWithEmailAndPassword(auth, form.values.email, form.values.password)
-      .then((userAuth) => {
-        dispatch(
-          login({
-            email: userAuth.user.email,
-            uid: userAuth.user.uid,
-            displayName: userAuth.user.displayName,
-            phoneNumber: userAuth.user.phoneNumber,
-            userType: "customer",
-          })
-        );
-        showNotification({
-          title: "Login Successfull !",
-          message: `Hi ${userAuth.user.displayName}, welcome back to our app.`,
+      .then(async (userAuth) => {
+        let docID;
+        const querySnapshot = await getDocs(collection(db, "deliverystaff"));
+        querySnapshot.forEach((doc) => {
+          if (doc.data().uid === userAuth.user.uid) {
+            docID = doc.data().uid;
+            return;
+          }
         });
-        form.reset();
-        navigate("/deliverystaff");
+
+        if (docID !== userAuth.user.uid) {
+          auth.signOut();
+          dispatch(logout());
+          showNotification({ color: "red", title: "You are not an authorized Delivery Staff" });
+        } else {
+          dispatch(
+            login({
+              email: userAuth.user.email,
+              uid: userAuth.user.uid,
+              displayName: userAuth.user.displayName,
+              phoneNumber: userAuth.user.phoneNumber,
+              userType: "customer",
+            })
+          );
+          showNotification({
+            title: "Login Successfull !",
+            message: `Hi ${userAuth.user.displayName}, welcome back to our app.`,
+          });
+          form.reset();
+          navigate("/deliverystaff");
+        }
       })
       .catch((err) => {
         showNotification({ color: "red", title: `Login Failed ! ${err.message}`, message: "Please try again" });
@@ -155,7 +170,7 @@ const Authentication = (props) => {
         <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
         <form onSubmit={form.onSubmit(submitHandler)}>
-          <Group direction="column" grow>
+          <Stack>
             {type === "register" && <TextInput type="text" required label="Name" placeholder="Your name" value={form.values.name} onChange={(event) => form.setFieldValue("name", event.currentTarget.value)} />}
 
             <TextInput required type="email" label="Email" placeholder="hello@gmail.com" value={form.values.email} onChange={(event) => form.setFieldValue("email", event.currentTarget.value)} error={form.errors.email && "Invalid email"} />
@@ -181,7 +196,7 @@ const Authentication = (props) => {
             />
 
             {type === "register" && <Checkbox label="I accept terms and conditions" checked={form.values.terms} onChange={(event) => form.setFieldValue("terms", event.currentTarget.checked)} />}
-          </Group>
+          </Stack>
 
           <Group position="apart" mt="xl">
             <Stack spacing="xs">

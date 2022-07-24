@@ -118,7 +118,14 @@ const Authentication = (props) => {
         // const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
-        console.log(user, "user");
+        if (type === "register") {
+          const customerData = {
+            email: result.user.email,
+            uid: result.user.uid,
+            userType: "customer",
+          };
+          addCustomerToDB(customerData.uid, customerData);
+        }
         dispatch(
           login({
             email: user.email,
@@ -128,6 +135,7 @@ const Authentication = (props) => {
             userType: "customer",
           })
         );
+
         showNotification({
           title: "Google Authentication Successfull !",
           message: `Hi ${user.displayName}, welcome back to our app.`,
