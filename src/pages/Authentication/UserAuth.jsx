@@ -7,9 +7,9 @@ import { GoogleButton } from "../../images/GoogleIcon";
 import { Link, useNavigate } from "react-router-dom";
 
 // Firebase
-import { auth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, sendEmailVerification, setDoc, doc, db } from "../../utils/firebaseConfig";
+import { collection, getDocs, auth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, sendEmailVerification, setDoc, doc, db } from "../../utils/firebaseConfig";
 import { useDispatch } from "react-redux";
-import { login } from "../../app/userSlice";
+import { login, logout } from "../../app/userSlice";
 
 const Authentication = (props) => {
   const provider = new GoogleAuthProvider();
@@ -41,22 +41,36 @@ const Authentication = (props) => {
 
   const loginHandler = () => {
     signInWithEmailAndPassword(auth, form.values.email, form.values.password)
-      .then((userAuth) => {
-        dispatch(
-          login({
-            email: userAuth.user.email,
-            uid: userAuth.user.uid,
-            displayName: userAuth.user.displayName,
-            phoneNumber: userAuth.user.phoneNumber,
-            userType: "customer",
-          })
-        );
-        showNotification({
-          title: "Login Successfull !",
-          message: `Hi ${userAuth.user.displayName}, welcome back to our app.`,
+      .then(async (userAuth) => {
+        let docID;
+        const querySnapshot = await getDocs(collection(db, "customers"));
+        querySnapshot.forEach((doc) => {
+          if (doc.data().uid === userAuth.user.uid) {
+            docID = doc.data().uid;
+            return;
+          }
         });
-        form.reset();
-        navigate("/customer");
+        if (docID !== userAuth.user.uid) {
+          auth.signOut();
+          dispatch(logout());
+          showNotification({ color: "red", title: "You are not an authorized Customer" });
+        } else {
+          dispatch(
+            login({
+              email: userAuth.user.email,
+              uid: userAuth.user.uid,
+              displayName: userAuth.user.displayName,
+              phoneNumber: userAuth.user.phoneNumber,
+              userType: "customer",
+            })
+          );
+          showNotification({
+            title: "Login Successfull !",
+            message: `Hi ${userAuth.user.displayName}, welcome back to our app.`,
+          });
+          form.reset();
+          navigate("/customer");
+        }
       })
       .catch((err) => {
         showNotification({ color: "red", title: `Login Failed ! ${err.message}`, message: "Please try again" });

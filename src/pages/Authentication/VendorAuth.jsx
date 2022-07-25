@@ -7,9 +7,9 @@ import { GoogleButton } from "../../images/GoogleIcon";
 import { Link, useNavigate } from "react-router-dom";
 
 // Firebase
-import { auth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, sendEmailVerification, setDoc, doc, db } from "../../utils/firebaseConfig";
+import { getDocs, collection, auth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, sendEmailVerification, setDoc, doc, db } from "../../utils/firebaseConfig";
 import { useDispatch } from "react-redux";
-import { login } from "../../app/userSlice";
+import { login, logout } from "../../app/userSlice";
 
 const Authentication = (props) => {
   const provider = new GoogleAuthProvider();
@@ -46,25 +46,39 @@ const Authentication = (props) => {
 
   const loginHandler = () => {
     signInWithEmailAndPassword(auth, form.values.email, form.values.password)
-      .then((userAuth) => {
-        dispatch(
-          login({
-            email: userAuth.user.email,
-            uid: userAuth.user.uid,
-            displayName: userAuth.user.displayName,
-            phoneNumber: userAuth.user.phoneNumber,
-            userType: "vendor",
-            fuelStationsName: form.values.fuelStationsName,
-            city: form.values.city,
-            state: form.values.state,
-          })
-        );
-        showNotification({
-          title: "Login Successfull !",
-          message: `Hi ${userAuth.user.displayName}, welcome back to our app.`,
+      .then(async (userAuth) => {
+        let docID;
+        const querySnapshot = await getDocs(collection(db, "vendors"));
+        querySnapshot.forEach((doc) => {
+          if (doc.data().uid === userAuth.user.uid) {
+            docID = doc.data().uid;
+            return;
+          }
         });
-        form.reset();
-        navigate("/vendor");
+        if (docID !== userAuth.user.uid) {
+          auth.signOut();
+          dispatch(logout());
+          showNotification({ color: "red", title: "You are not an authorized Vendor" });
+        } else {
+          dispatch(
+            login({
+              email: userAuth.user.email,
+              uid: userAuth.user.uid,
+              displayName: userAuth.user.displayName,
+              phoneNumber: userAuth.user.phoneNumber,
+              userType: "vendor",
+              fuelStationsName: form.values.fuelStationsName,
+              city: form.values.city,
+              state: form.values.state,
+            })
+          );
+          showNotification({
+            title: "Login Successfull !",
+            message: `Hi ${userAuth.user.displayName}, welcome back to our app.`,
+          });
+          form.reset();
+          navigate("/vendor");
+        }
       })
       .catch((err) => {
         showNotification({ color: "red", title: `Login Failed ! ${err.message}`, message: "Please try again" });
@@ -112,7 +126,6 @@ const Authentication = (props) => {
     await signInWithPopup(auth, provider)
       .then((result) => {
         const user = result.user;
-        console.log(user, "user");
         dispatch(
           login({
             email: user.email,
@@ -163,7 +176,7 @@ const Authentication = (props) => {
         <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
         <form onSubmit={form.onSubmit(submitHandler)}>
-          <Group direction="column" grow>
+          <Stack>
             <TextInput required label="Email" placeholder="hello@gmail.com" value={form.values.email} onChange={(event) => form.setFieldValue("email", event.currentTarget.value)} error={form.errors.email && "Invalid email"} />
             {type === "register" && (
               <>
@@ -192,7 +205,7 @@ const Authentication = (props) => {
             />
 
             {type === "register" && <Checkbox label="I accept terms and conditions" checked={form.values.terms} onChange={(event) => form.setFieldValue("terms", event.currentTarget.checked)} />}
-          </Group>
+          </Stack>
 
           <Group position="apart" mt="xl">
             <Stack spacing="xs">
