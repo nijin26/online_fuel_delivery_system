@@ -10,8 +10,9 @@ import { useStyles } from "../../styles/Admin";
 import { getDocs, collection, db } from "../../utils/firebaseConfig";
 
 // Component Imports
-import VendorList from "./VendorList";
 import CustomerList from "./CustomerList";
+import VendorList from "./VendorList";
+import DeliveryStaffList from "./DeliveryStaffList";
 import Contacts from "./Contacts";
 import Newsletter from "./Newsletter";
 
@@ -116,9 +117,9 @@ const Admin = () => {
           )}
           {selectedMenu === 1 && <CustomerList />}
           {selectedMenu === 2 && <VendorList />}
-          {selectedMenu === 3 && <VendorList />}
-          {selectedMenu === 4 && <Contacts />}
-          {selectedMenu === 5 && <Newsletter />}
+          {selectedMenu === 3 && <DeliveryStaffList />}
+          {selectedMenu === 4 && <Newsletter />}
+          {selectedMenu === 5 && <Contacts />}
         </div>
       </Paper>
       <Drawer size={"sm"} padding="sm" position="left" opened={open} onClose={() => setOpen((o) => !o)}>
