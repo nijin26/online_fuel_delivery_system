@@ -10,6 +10,7 @@ import { useStyles } from "../../styles/Admin";
 import { getDocs, collection, db } from "../../utils/firebaseConfig";
 
 // Component Imports
+import VendorList from "./VendorList";
 import CustomerList from "./CustomerList";
 import Contacts from "./Contacts";
 import Newsletter from "./Newsletter";
@@ -114,6 +115,8 @@ const Admin = () => {
             </div>
           )}
           {selectedMenu === 1 && <CustomerList />}
+          {selectedMenu === 2 && <VendorList />}
+          {selectedMenu === 3 && <VendorList />}
           {selectedMenu === 4 && <Contacts />}
           {selectedMenu === 5 && <Newsletter />}
         </div>
