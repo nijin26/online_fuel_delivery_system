@@ -10,6 +10,7 @@ import { useStyles } from "../../styles/Admin";
 import { getDocs, collection, db } from "../../utils/firebaseConfig";
 
 // Component Imports
+import CustomerList from "./CustomerList";
 import Contacts from "./Contacts";
 import Newsletter from "./Newsletter";
 
@@ -112,6 +113,7 @@ const Admin = () => {
               </SimpleGrid>
             </div>
           )}
+          {selectedMenu === 1 && <CustomerList />}
           {selectedMenu === 4 && <Contacts />}
           {selectedMenu === 5 && <Newsletter />}
         </div>
