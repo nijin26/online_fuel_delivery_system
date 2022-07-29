@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { RingProgress, Burger, Drawer, Container, Paper, SimpleGrid, Text, NavLink, useMantineColorScheme, SegmentedControl, Group, Center, Box } from "@mantine/core";
-import { LayoutDashboard, News, Message, SunHigh, Moon, ArrowUpRight } from "tabler-icons-react";
+import { LayoutDashboard, News, Message, SunHigh, Moon, ArrowUpRight, TruckDelivery, GasStation, Users } from "tabler-icons-react";
 
 // Local File Imports
 import { toggleNavs } from "../../app/userSlice";
@@ -15,7 +15,6 @@ import Newsletter from "./Newsletter";
 
 const Admin = () => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-  const [totalViews, setTotalViews] = useState();
   const dispatch = useDispatch();
   const { classes } = useStyles();
   const [open, setOpen] = useState(false);
@@ -51,7 +50,7 @@ const Admin = () => {
   console.log(localStorage.getItem("views"));
 
   const menuItems = menuData.map((item, index) => {
-    return <NavLink my={"lg"} key={item.label} active={index === selectedMenu} label={item.label} icon={<item.icon size={24} stroke={1.5} fill={colorScheme === "dark" ? "white" : "black"} />} onClick={() => setSelectedMenu(index)} />;
+    return <NavLink my={"lg"} key={item.label} active={index === selectedMenu} label={item.label} icon={<item.icon size={28} stroke={2} fill={colorScheme === "dark" ? "white" : "black"} />} onClick={() => setSelectedMenu(index)} />;
   });
 
   const data = [
@@ -113,8 +112,8 @@ const Admin = () => {
               </SimpleGrid>
             </div>
           )}
-          {selectedMenu === 2 && <Contacts />}
-          {selectedMenu === 1 && <Newsletter />}
+          {selectedMenu === 4 && <Contacts />}
+          {selectedMenu === 5 && <Newsletter />}
         </div>
       </Paper>
       <Drawer size={"sm"} padding="sm" position="left" opened={open} onClose={() => setOpen((o) => !o)}>
@@ -128,7 +127,7 @@ const Admin = () => {
                 value: "light",
                 label: (
                   <Center>
-                    <SunHigh size={24} stroke={0.5} fill={colorScheme === "dark" ? "white" : "black"} />
+                    <SunHigh size={32} strokeWidth={2} fill={colorScheme === "dark" ? "white" : "black"} />
                     <Box ml={10}>Light</Box>
                   </Center>
                 ),
@@ -137,7 +136,7 @@ const Admin = () => {
                 value: "dark",
                 label: (
                   <Center>
-                    <Moon size={24} stroke={1.5} fill={colorScheme === "dark" ? "white" : "black"} />
+                    <Moon size={32} stroke={2} fill={colorScheme === "dark" ? "white" : "black"} />
                     <Box ml={10}>Dark</Box>
                   </Center>
                 ),
@@ -154,6 +153,9 @@ export default Admin;
 
 const menuData = [
   { icon: LayoutDashboard, label: "Dashboard" },
+  { icon: Users, label: "Customers" },
+  { icon: GasStation, label: "Vendors" },
+  { icon: TruckDelivery, label: "Delivery Staffs" },
   { icon: News, label: "Newsletter Subscribers" },
   { icon: Message, label: "Contacts" },
 ];
