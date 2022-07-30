@@ -4,7 +4,7 @@ import { NotificationsProvider, showNotification } from "@mantine/notifications"
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 import { useDispatch, useSelector } from "react-redux";
-import { login, logout, selectUser } from "./app/userSlice";
+import { login, logout, toggleNavs, selectUser, showNav } from "./app/userSlice";
 import { auth, onAuthStateChanged } from "./utils/firebaseConfig";
 
 //components
@@ -28,6 +28,7 @@ import PrivateRoute from "./utils/PrivateRoute";
 
 function App() {
   const user = useSelector(selectUser);
+  const showNavigation = useSelector(showNav);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -74,7 +75,7 @@ function App() {
       <MantineProvider theme={myTheme}>
         <NotificationsProvider position="top-right" autoClose={4000}>
           <Container fluid style={{ padding: 0 }}>
-            <HomeHeader links={headerLinks} handleLogout={handleLogout} isLoggedIn={user} />
+            {showNavigation && <HomeHeader links={headerLinks} handleLogout={handleLogout} isLoggedIn={user} />}
             <Routes>
               <Route element={<PrivateRoute />}>
                 <Route path="/admin" element={<Admin />} />
@@ -95,7 +96,7 @@ function App() {
               <Route exact path="/admin" element={<Admin />} />
               <Route exact path="*" element={<InvalidURL />} />
             </Routes>
-            <Footer links={footerLinks} />
+            {showNavigation && <Footer links={footerLinks} />}
           </Container>
         </NotificationsProvider>
       </MantineProvider>

@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   user: null,
-  toggle: false,
+  toggle: true,
 };
 
 const userSlice = createSlice({
@@ -28,4 +28,4 @@ const userSlice = createSlice({
 export default userSlice.reducer;
 export const { login, logout, toggleNavs } = userSlice.actions;
 export const selectUser = (state) => state.user.user;
-export const showNav = (state) => state.user.hide;
+export const showNav = (state) => state.user.toggle;
