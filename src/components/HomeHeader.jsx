@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Header, Container, Group, Burger, Transition, Paper } from "@mantine/core";
-import { useBooleanToggle } from "@mantine/hooks";
+import { useDisclosure } from "@mantine/hooks";
 // import { MantineLogo } from "../../shared/MantineLogo";
 import { Link } from "react-router-dom";
 
@@ -9,7 +9,7 @@ import { useStyles } from "../styles/HomeHeader";
 import ThemeToggle from "./ThemeToggle";
 
 const HomeHeader = ({ links, isLoggedIn, handleLogout }) => {
-  const [opened, toggleOpened] = useBooleanToggle(false);
+  const [opened, toggleOpened] = useDisclosure(false);
   const [active, setActive] = useState(links[0].link);
   const { classes, cx } = useStyles();
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { useForm } from "@mantine/hooks";
+import { useForm } from "@mantine/form";
 import { Container, TextInput, PasswordInput, Text, Paper, Group, Stack, Button, Divider, Anchor } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { Link, useNavigate } from "react-router-dom";

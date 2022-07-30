@@ -3,7 +3,7 @@ import { Container, Paper, Text, TextInput, Textarea, Button, Group, SimpleGrid 
 import { ContactIconsList } from "../components/ContactIconsList";
 import { showNotification } from "@mantine/notifications";
 import { Messages, MessagesOff } from "tabler-icons-react";
-import { useForm } from "@mantine/hooks";
+import { useForm } from "@mantine/form";
 
 import { useStyles } from "../styles/ContactUs";
 
