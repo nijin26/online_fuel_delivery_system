@@ -24,7 +24,7 @@ import Customer from "./pages/Customer/Customer";
 import DeliveryStaff from "./pages/DeliveryStaff/DeliveryStaff";
 import Vendor from "./pages/Vendor/Vendor";
 import InvalidURL from "./pages/InvalidURL";
-import ProtectedRoute from "./utils/ProtectedRoute";
+import PrivateRoute from "./utils/PrivateRoute";
 
 function App() {
   const user = useSelector(selectUser);
@@ -76,15 +76,13 @@ function App() {
           <Container fluid style={{ padding: 0 }}>
             <HomeHeader links={headerLinks} handleLogout={handleLogout} isLoggedIn={user} />
             <Routes>
-              <Route element={<ProtectedRoute user={user} type="customer" />}>
+              <Route element={<PrivateRoute />}>
+                <Route path="/admin" element={<Admin />} />
                 <Route path="/customer" element={<Customer />} />
-              </Route>
-              <Route element={<ProtectedRoute user={user} type="vendor" />}>
                 <Route path="/vendor" element={<Vendor />} />
-              </Route>
-              <Route element={<ProtectedRoute user={user} type="deliverystaff" />}>
                 <Route path="/deliverystaff" element={<DeliveryStaff />} />
               </Route>
+
               <Route exact path="/" element={<Home />} />
               <Route exact path="/auth" element={<Auth />} />
               <Route exact path="/adminauth" element={<AdminAuth />} />

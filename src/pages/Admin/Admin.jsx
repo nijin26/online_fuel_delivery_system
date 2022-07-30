@@ -5,11 +5,7 @@ import AdminNavbar from "../../components/AdminNavbar";
 const Admin = () => {
   const [open, setOpen] = React.useState(true);
 
-  return (
-    <Drawer opened={open} onClose={() => setOpen(false)} size="xl" closeButtonLabel="">
-      <AdminNavbar />
-    </Drawer>
-  );
+  return <h1>Admin Panel</h1>;
 };
 
 export default Admin;
