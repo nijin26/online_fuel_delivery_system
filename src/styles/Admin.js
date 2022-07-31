@@ -5,7 +5,7 @@ export const useStyles = createStyles((theme) => ({
     color: theme.colorScheme === "dark" ? "white" : "black",
   },
   Paper: {
-    height: "100vh",
+    minHeight: "100vh",
   },
   subContainer: {
     margin: "0 auto",

@@ -3,12 +3,14 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Burger, Drawer, Container, Paper, SimpleGrid, Text, NavLink, useMantineColorScheme, SegmentedControl, Group, Center, Box } from "@mantine/core";
 import { LayoutDashboard, News, Message, SunHigh, Moon } from "tabler-icons-react";
-import { useColorScheme } from "@mantine/hooks";
 
 // Local File Imports
 import { toggleNavs } from "../../app/userSlice";
 import { useStyles } from "../../styles/Admin";
 import { getDocs, collection, db } from "../../utils/firebaseConfig";
+
+// Component Imports
+import Contacts from "./Contacts";
 
 const Admin = () => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
@@ -39,20 +41,23 @@ const Admin = () => {
       <Paper shadow="xs" radius="0" p={"sm"} className={classes.Paper}>
         <Burger opened={open} onClick={() => setOpen((o) => !o)} size={30} className={classes.Burger} />
         <div className={classes.subContainer}>
-          <div id="dashboard">
-            <SimpleGrid
-              cols={3}
-              spacing="lg"
-              breakpoints={[
-                { maxWidth: 980, cols: 3, spacing: "md" },
-                { maxWidth: 600, cols: 1, spacing: "sm" },
-              ]}
-            >
-              <StatsCard count={counts.customers} type="Customers" />
-              <StatsCard count={counts.vendors} type="Vendors" />
-              <StatsCard count={counts.deliverystaffs} type="Delivery Staffs" />
-            </SimpleGrid>
-          </div>
+          {selectedMenu === 0 && (
+            <div id="dashboard">
+              <SimpleGrid
+                cols={3}
+                spacing="lg"
+                breakpoints={[
+                  { maxWidth: 980, cols: 3, spacing: "md" },
+                  { maxWidth: 600, cols: 1, spacing: "sm" },
+                ]}
+              >
+                <StatsCard count={counts.customers} type="Customers" />
+                <StatsCard count={counts.vendors} type="Vendors" />
+                <StatsCard count={counts.deliverystaffs} type="Delivery Staffs" />
+              </SimpleGrid>
+            </div>
+          )}
+          {selectedMenu === 2 && <Contacts />}
         </div>
       </Paper>
       <Drawer size={"sm"} padding="sm" position="left" opened={open} onClose={() => setOpen((o) => !o)}>
