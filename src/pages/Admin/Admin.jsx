@@ -2,12 +2,15 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { RingProgress, Burger, Drawer, Container, Paper, SimpleGrid, Text, NavLink, useMantineColorScheme, SegmentedControl, Group, Center, Box } from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
+
 import { LayoutDashboard, News, Message, SunHigh, Moon, ArrowUpRight, TruckDelivery, GasStation, Users } from "tabler-icons-react";
 
 // Local File Imports
-import { toggleNavs } from "../../app/userSlice";
+import { toggleNavs, logout } from "../../app/userSlice";
+
 import { useStyles } from "../../styles/Admin";
-import { getDocs, collection, db } from "../../utils/firebaseConfig";
+import { auth, getDocs, collection, db } from "../../utils/firebaseConfig";
 
 // Component Imports
 import CustomerList from "./CustomerList";
@@ -36,6 +39,14 @@ const Admin = () => {
     });
   }, []);
 
+  const handleLogout = () => {
+    showNotification({ title: "You have Logout Successfully" });
+    auth.signOut();
+    dispatch(logout());
+    dispatch(toggleNavs(true));
+    navigate("/auth", { replace: true });
+  };
+
   // useEffect(() => {
   // async function fetchViews() {
   //   const docref = ref(rtdb, "totalviews/");
@@ -49,8 +60,6 @@ const Admin = () => {
   // const count = await fetchViews();
   // console.log("fetchViews is called", count);
   // }, []);
-
-  console.log(localStorage.getItem("views"));
 
   const menuItems = menuData.map((item, index) => {
     return <NavLink my={"lg"} key={item.label} active={index === selectedMenu} label={item.label} icon={<item.icon size={28} stroke={2} fill={colorScheme === "dark" ? "white" : "black"} />} onClick={() => setSelectedMenu(index)} />;
