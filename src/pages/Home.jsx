@@ -12,11 +12,12 @@ import { EmailBanner } from "../components/EmailBanner";
 const Home = () => {
   const { classes } = useStyles();
 
-  const newsLetterHandler = async (mail) => {
+  const newsLetterHandler = async (email) => {
     try {
-      if (/^\S+@\S+$/.test(mail)) {
+      if (/^\S+@\S+$/.test(email)) {
         await addDoc(collection(db, "newsletter"), {
-          mail,
+          email,
+          time: Date.now(),
         });
         showNotification({ title: "Thank You!", message: "You have successfully subscribed to our newsletter." });
       } else showNotification({ color: "red", title: "Enter a valid email address" });

@@ -11,6 +11,7 @@ import { getDocs, collection, db } from "../../utils/firebaseConfig";
 
 // Component Imports
 import Contacts from "./Contacts";
+import Newsletter from "./Newsletter";
 
 const Admin = () => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
@@ -18,7 +19,7 @@ const Admin = () => {
   const { classes } = useStyles();
   const [open, setOpen] = useState(false);
   const [counts, setCounts] = useState({ customers: 0, vendors: 0, deliverystaffs: 0 });
-  const [selectedMenu, setSelectedMenu] = useState("");
+  const [selectedMenu, setSelectedMenu] = useState(0);
 
   useEffect(async () => {
     dispatch(toggleNavs(false));
@@ -58,6 +59,7 @@ const Admin = () => {
             </div>
           )}
           {selectedMenu === 2 && <Contacts />}
+          {selectedMenu === 1 && <Newsletter />}
         </div>
       </Paper>
       <Drawer size={"sm"} padding="sm" position="left" opened={open} onClose={() => setOpen((o) => !o)}>
