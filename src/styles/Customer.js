@@ -2,7 +2,9 @@ import { createStyles } from "@mantine/core";
 
 export const useStyles = createStyles((theme) => ({
   container: {
-    minHeight: "50vh",
+    minHeight: "100vh",
+    width: "100%",
+    margin: 0,
   },
   group: {
     "& > div": {
