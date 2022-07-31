@@ -37,6 +37,10 @@ const Home = ({ totalViews }) => {
   //   updateViews();
   // }, [totalViews]);
 
+  useEffect(() => {
+    localStorage.setItem("views", 200);
+  }, []);
+
   return (
     <>
       <div className={classes.root}>
