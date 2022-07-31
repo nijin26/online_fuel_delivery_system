@@ -2,11 +2,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
-import { RingProgress, Burger, Drawer, Container, Paper, SimpleGrid, Text, NavLink, useMantineColorScheme, SegmentedControl, Group, Center, Box, Button } from "@mantine/core";
+import { upperFirst } from "@mantine/hooks";
+import { Table, RingProgress, Burger, Drawer, Container, Paper, SimpleGrid, Text, NavLink, useMantineColorScheme, SegmentedControl, Group, Center, Box, Button } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 
-import { LayoutDashboard, News, Message, SunHigh, Moon, ArrowUpRight, TruckDelivery, GasStation, Users, Logout } from "tabler-icons-react";
+import { ClipboardList, LayoutDashboard, News, Message, SunHigh, Moon, ArrowUpRight, TruckDelivery, GasStation, Users, Logout } from "tabler-icons-react";
 
 // Local File Imports
 import { toggleNavs, logout } from "../../app/userSlice";
@@ -28,8 +28,9 @@ const Admin = () => {
 
   const { classes } = useStyles();
   const [open, setOpen] = useState(false);
-  const [counts, setCounts] = useState({ customers: 0, vendors: 0, deliverystaffs: 0 });
+  const [counts, setCounts] = useState({ customers: 0, vendors: 0, deliverystaffs: 0, orders: 0 });
   const [selectedMenu, setSelectedMenu] = useState(0);
+  const [myOrder, setMyOrders] = useState([]);
 
   useEffect(() => {
     const collectCounts = async () => {
@@ -37,10 +38,12 @@ const Admin = () => {
       const customersSnapshot = await getDocs(collection(db, "customers"));
       const vendorsSnapshot = await getDocs(collection(db, "vendors"));
       const deliveryStaffSnapshot = await getDocs(collection(db, "deliverystaff"));
+      const ordersSnapshot = await getDocs(collection(db, "orders"));
       setCounts({
         customers: customersSnapshot.size,
         vendors: vendorsSnapshot.size,
         deliverystaffs: deliveryStaffSnapshot.size,
+        orders: ordersSnapshot.size,
       });
     };
     collectCounts();
@@ -68,6 +71,31 @@ const Admin = () => {
   // console.log("fetchViews is called", count);
   // }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const snapshot = await getDocs(collection(db, "orders"));
+      const orderDetails = [];
+      snapshot.forEach((doc) => {
+        orderDetails.push(doc.data());
+      });
+      setMyOrders(orderDetails);
+    };
+    fetchData();
+  }, [selectedMenu]);
+
+  let rows = myOrder?.map(({ fuel, quantity, totalAmount, orderPlacedAt, fuelStationName, orderPlacedBy }) => {
+    return (
+      <tr key={orderPlacedAt}>
+        <td>{new Intl.DateTimeFormat("en-IN", { year: "numeric", day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(orderPlacedAt)}</td>
+        <td>{orderPlacedBy}</td>
+        <td>{fuelStationName}</td>
+        <td>{quantity} L</td>
+        <td>{upperFirst(fuel)}</td>
+        <td>Rs. {totalAmount}</td>
+      </tr>
+    );
+  });
+
   const menuItems = menuData.map((item, index) => {
     return <NavLink my={"lg"} key={item.label} active={index === selectedMenu} label={item.label} icon={<item.icon size={28} stroke={2} fill={colorScheme === "dark" ? "white" : "black"} />} onClick={() => setSelectedMenu(index)} />;
   });
@@ -75,7 +103,7 @@ const Admin = () => {
   const data = [
     { label: "Total Website Visits", progress: 40, color: "green", stats: localStorage.getItem("views") },
     { label: "Total Users", progress: 50, color: "blue", stats: counts.customers + counts.deliverystaffs + counts.vendors },
-    { label: "Total Orders", progress: 30, color: "pink", stats: 10 },
+    { label: "Total Orders", progress: 30, color: "pink", stats: counts.orders },
   ];
 
   const stats = data.map((stat) => {
@@ -134,8 +162,23 @@ const Admin = () => {
           {selectedMenu === 1 && <CustomerList />}
           {selectedMenu === 2 && <VendorList />}
           {selectedMenu === 3 && <DeliveryStaffList />}
-          {selectedMenu === 4 && <Newsletter />}
-          {selectedMenu === 5 && <Contacts />}
+          {selectedMenu === 4 && (
+            <Table horizontalSpacing="sm" verticalSpacing="sm" fontSize="md" highlightOnHover>
+              <thead>
+                <tr>
+                  <th>Order Placed At</th>
+                  <th>Order Placed By</th>
+                  <th>Fuel Station</th>
+                  <th>Quantity</th>
+                  <th>Fuel Type</th>
+                  <th>Total Amount</th>
+                </tr>
+              </thead>
+              <tbody>{rows}</tbody>
+            </Table>
+          )}
+          {selectedMenu === 5 && <Newsletter />}
+          {selectedMenu === 6 && <Contacts />}
         </div>
       </Paper>
       <Drawer size={"sm"} padding="sm" position="left" opened={open} onClose={() => setOpen((o) => !o)}>
@@ -181,6 +224,7 @@ const menuData = [
   { icon: Users, label: "Customers" },
   { icon: GasStation, label: "Vendors" },
   { icon: TruckDelivery, label: "Delivery Staffs" },
+  { icon: ClipboardList, label: "All Orders" },
   { icon: News, label: "Newsletter Subscribers" },
   { icon: Message, label: "Contacts" },
 ];

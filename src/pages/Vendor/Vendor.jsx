@@ -27,7 +27,6 @@ const Vendor = () => {
   }, []);
 
   useEffect(() => {
-    console.log("Useeffect is calling");
     const fetchData = async () => {
       const snapshot = await getDocs(collection(db, "orders"));
       const orderDetails = [];
