@@ -9,7 +9,7 @@ import { useStyles } from "../styles/HomeHeader";
 import ThemeToggle from "./ThemeToggle";
 
 const HomeHeader = ({ links, isLoggedIn, handleLogout }) => {
-  const [opened, toggleOpened] = useDisclosure(false);
+  const [opened, handlers] = useDisclosure(false);
   const [active, setActive] = useState(links[0].link);
   const { classes, cx } = useStyles();
 
@@ -22,7 +22,7 @@ const HomeHeader = ({ links, isLoggedIn, handleLogout }) => {
           className={classes.link}
           onClick={() => {
             handleLogout();
-            toggleOpened(false);
+            handlers.close();
           }}
         >
           Logout
@@ -36,7 +36,7 @@ const HomeHeader = ({ links, isLoggedIn, handleLogout }) => {
           className={cx(classes.link, { [classes.linkActive]: active === link.link })}
           onClick={() => {
             setActive(link.link);
-            toggleOpened(false);
+            handlers.close();
           }}
         >
           {link.label}
@@ -52,7 +52,7 @@ const HomeHeader = ({ links, isLoggedIn, handleLogout }) => {
           {items}
         </Group>
         <ThemeToggle />
-        <Burger opened={opened} onClick={() => toggleOpened()} className={classes.burger} size="sm" />
+        <Burger opened={opened} onClick={() => handlers.open()} className={classes.burger} size="sm" />
         <Transition transition="pop-top-right" duration={200} mounted={opened}>
           {(styles) => (
             <Paper className={classes.dropdown} withBorder style={styles}>
