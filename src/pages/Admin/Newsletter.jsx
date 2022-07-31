@@ -19,7 +19,7 @@ const Newsletter = () => {
 
   let rows = Newsletter?.map(({ email, time }) => (
     <tr key={email}>
-      <td>{new Date(time)}</td>
+      <td>{new Intl.DateTimeFormat("en-IN", { year: "numeric", day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(time)}</td>
       <td>{email}</td>
     </tr>
   ));

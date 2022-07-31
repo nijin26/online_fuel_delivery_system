@@ -35,8 +35,8 @@ const Contacts = () => {
         <tr>
           <th>Name</th>
           <th>Email</th>
-          <th>Message</th>
           <th>Subject</th>
+          <th>Message</th>
         </tr>
       </thead>
       <tbody>{rows}</tbody>
