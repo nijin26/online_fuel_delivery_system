@@ -4,8 +4,8 @@ import { NotificationsProvider, showNotification } from "@mantine/notifications"
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 import { useDispatch, useSelector } from "react-redux";
-import { login, logout, toggleNavs, selectUser, showNav } from "./app/userSlice";
-import { auth, onAuthStateChanged } from "./utils/firebaseConfig";
+import { login, logout, selectUser, showNav } from "./app/userSlice";
+import { auth, onAuthStateChanged, rtdb, ref, onValue } from "./utils/firebaseConfig";
 
 //components
 import Home from "./pages/Home";
@@ -27,6 +27,8 @@ import InvalidURL from "./pages/InvalidURL";
 import PrivateRoute from "./utils/PrivateRoute";
 
 function App() {
+  const [totalViews, setTotalViews] = React.useState();
+
   const user = useSelector(selectUser);
   const showNavigation = useSelector(showNav);
   const navigate = useNavigate();
@@ -69,6 +71,20 @@ function App() {
     dispatch(logout());
     navigate("/auth", { replace: true });
   };
+
+  // useEffect(() => {
+  //   const fetchViews = async () => {
+  //     let data;
+  //     const docref = ref(rtdb, "totalviews/");
+  //     onValue(docref, async (snapshot) => {
+  //       data = await snapshot.val()?.count;
+  //     });
+  //     setTotalViews(data);
+  //     console.log(data);
+  //   };
+  //   fetchViews();
+  //   console.log("fetchViews is called");
+  // }, []);
 
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>

@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Container, Title, Text, Button } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { Link } from "react-router-dom";
 
-import { db, addDoc, collection } from "../utils/firebaseConfig";
+import { db, addDoc, collection, rtdb } from "../utils/firebaseConfig";
+import { onValue, ref, update } from "firebase/database";
 
 import { useStyles } from "../styles/Home";
 
 import { EmailBanner } from "../components/EmailBanner";
 
-const Home = () => {
+const Home = ({ totalViews }) => {
   const { classes } = useStyles();
 
   const newsLetterHandler = async (email) => {
@@ -25,6 +26,16 @@ const Home = () => {
       showNotification({ color: "red", title: "Error in subscribing for newsletter", message: "Try Again." });
     }
   };
+
+  // useEffect(() => {
+  //   const updateViews = async () => {
+  //     await update(ref(rtdb, "totalviews"), {
+  //       count: totalViews && totalViews + 1,
+  //     });
+  //     console.log("Update Views is called");
+  //   };
+  //   updateViews();
+  // }, [totalViews]);
 
   return (
     <>

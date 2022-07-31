@@ -7,7 +7,7 @@ import { LayoutDashboard, News, Message, SunHigh, Moon } from "tabler-icons-reac
 // Local File Imports
 import { toggleNavs } from "../../app/userSlice";
 import { useStyles } from "../../styles/Admin";
-import { getDocs, collection, db } from "../../utils/firebaseConfig";
+import { getDocs, collection, db, ref, rtdb, onValue } from "../../utils/firebaseConfig";
 
 // Component Imports
 import Contacts from "./Contacts";
@@ -31,6 +31,19 @@ const Admin = () => {
       vendors: vendorsSnapshot.size,
       deliverystaffs: deliveryStaffSnapshot.size,
     });
+  }, []);
+
+  useEffect(() => {
+    const fetchViews = async () => {
+      const docref = ref(rtdb, "totalviews/");
+      onValue(docref, async (snapshot) => {
+        const data = await snapshot.val()?.count;
+      });
+      console.log(data);
+      return data
+    };
+   const data = await fetchViews();
+    console.log("fetchViews is called");
   }, []);
 
   const menuItems = menuData.map((item, index) => {
