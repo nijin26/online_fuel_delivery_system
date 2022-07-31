@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table } from "@mantine/core";
 import { upperFirst } from "@mantine/hooks";
-import { Center, SegmentedControl, Box, Burger, Drawer, useMantineColorScheme, NavLink, Container, Paper, Text, Group, Button, NumberInput, SimpleGrid, Badge, Stack } from "@mantine/core";
+import { Center, Select, SegmentedControl, Box, Burger, Drawer, useMantineColorScheme, NavLink, Container, Paper, Text, Group, Button, NumberInput, SimpleGrid, Badge, Stack } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { showNotification } from "@mantine/notifications";
 import { useSelector, useDispatch } from "react-redux";
@@ -20,20 +20,28 @@ const Customer = () => {
   const dispatch = useDispatch();
   const { classes } = useStyles();
   const [fuel, setFuel] = useState("petrol");
+  const [value, setValue] = useState("");
+
   const [quantity, setQuantity] = useState(3);
   const [open, setOpen] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState(0);
   const [myOrder, setMyOrders] = useState([]);
+  const [vendors, setVendors] = useState([]);
 
   const [selectedQuantity, setSelectedQuantity] = useState(3);
   const [totalAmount, setTotalAmount] = useState(0);
-  const [coords, setCoords] = useState({});
-  const [bounds, setBounds] = useState(null);
-  const [autocomplete, setAutocomplete] = useState(null);
-  const [childClicked, setChildClicked] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const quantityList = [3, 5, 8, 10];
+  useEffect(() => {
+    const fetchData = async () => {
+      const snapshot = await getDocs(collection(db, "vendors"));
+      const vendorsDetails = [];
+      snapshot.forEach((doc) => {
+        vendorsDetails.push({ value: `${doc.data().uid}`, label: doc.data().fuelStationsName });
+      });
+      setVendors(vendorsDetails);
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     dispatch(toggleNavs(false));
@@ -48,11 +56,12 @@ const Customer = () => {
     fetchData();
   }, [selectedMenu]);
 
-  let rows = myOrder?.map(({ fuel, quantity, userId, totalAmount, orderPlacedAt }) => {
+  let rows = myOrder?.map(({ fuel, quantity, userId, totalAmount, fuelStationName, orderPlacedAt }) => {
     if (userId === user.uid) {
       return (
         <tr key={userId}>
           <td>{new Intl.DateTimeFormat("en-IN", { year: "numeric", day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(orderPlacedAt)}</td>
+          <td>{fuelStationName}</td>
           <td>{quantity} L</td>
           <td>{upperFirst(fuel)}</td>
           <td>Rs. {totalAmount}</td>
@@ -95,6 +104,12 @@ const Customer = () => {
   // };
 
   const orderHandler = async () => {
+    let fuelStationName;
+    vendors?.map((vendor) => {
+      if (vendor.value === value) {
+        fuelStationName = vendor.label;
+      }
+    });
     const data = {
       orderPlacedAt: Date.now(),
       orderPlacedBy: user.displayName,
@@ -102,6 +117,8 @@ const Customer = () => {
       quantity,
       fuel,
       totalAmount,
+      fuelStationSelected: value,
+      fuelStationName,
     };
     console.log(data);
     try {
@@ -125,6 +142,8 @@ const Customer = () => {
   const menuItems = menuData.map((item, index) => {
     return <NavLink my={"lg"} key={item.label} active={index === selectedMenu} label={item.label} icon={<item.icon size={28} stroke={2} fill={colorScheme === "dark" ? "white" : "black"} />} onClick={() => setSelectedMenu(index)} />;
   });
+
+  const quantityList = [3, 5, 8, 10];
 
   return (
     <Container fluid m={"0"} p="0">
@@ -165,6 +184,9 @@ const Customer = () => {
                     {quantity}L
                   </Badge>
                 ))}
+                <Center>
+                  <Select width={"90%"} label="Select Nearby Fuel Stations" placeholder="Pick a Fuel Station" value={value} onChange={setValue} searchable required data={vendors} />
+                </Center>
               </SimpleGrid>
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.754795644414!2d76.69351641460398!3d8.994696192002317!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b06090686f77575%3A0x46abecda8aa0155d!2sThangal%20Kunju%20Musaliar%20Institute%20of%20Technology!5e0!3m2!1sen!2sin!4v1657652641806!5m2!1sen!2sin"
@@ -192,6 +214,7 @@ const Customer = () => {
             <thead>
               <tr>
                 <th>Order Placed At</th>
+                <th>Selected Fuel Station</th>
                 <th>Quantity</th>
                 <th>Fuel Type</th>
                 <th>Total Amount</th>

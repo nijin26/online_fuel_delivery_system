@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { upperFirst } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
 import { Table, Button, Burger, Drawer, Container, Paper, SimpleGrid, Text, NavLink, useMantineColorScheme, SegmentedControl, Group, Center, Box } from "@mantine/core";
 import { Moon, SunHigh, Logout, CurrencyRupee, Message, TruckDelivery, LayoutDashboard } from "tabler-icons-react";
 
-import { toggleNavs, logout } from "../../app/userSlice";
+import { selectUser, toggleNavs, logout } from "../../app/userSlice";
 import { auth, db, collection, addDoc, getDocs } from "../../utils/firebaseConfig";
 import { useStyles } from "../../styles/Vendor";
 
 const Vendor = () => {
+  const user = useSelector(selectUser);
+
   const [open, setOpen] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState(0);
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
@@ -25,6 +27,7 @@ const Vendor = () => {
   }, []);
 
   useEffect(() => {
+    console.log("Useeffect is calling");
     const fetchData = async () => {
       const snapshot = await getDocs(collection(db, "orders"));
       const orderDetails = [];
@@ -48,16 +51,19 @@ const Vendor = () => {
     return <NavLink my={"lg"} key={item.label} active={index === selectedMenu} label={item.label} icon={<item.icon size={28} stroke={2} fill={colorScheme === "dark" ? "white" : "black"} />} onClick={() => setSelectedMenu(index)} />;
   });
 
-  let rows = myOrder?.map(({ fuel, quantity, userId, totalAmount, orderPlacedAt, orderPlacedBy }) => {
-    return (
-      <tr key={userId}>
-        <td>{new Intl.DateTimeFormat("en-IN", { year: "numeric", day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(orderPlacedAt)}</td>
-        <td>{orderPlacedBy}</td>
-        <td>{quantity} L</td>
-        <td>{upperFirst(fuel)}</td>
-        <td>Rs. {totalAmount}</td>
-      </tr>
-    );
+  let rows = myOrder?.map(({ fuel, quantity, userId, totalAmount, orderPlacedAt, fuelStationName, fuelStationSelected, orderPlacedBy }) => {
+    if (user.uid === fuelStationSelected) {
+      return (
+        <tr key={orderPlacedAt}>
+          <td>{new Intl.DateTimeFormat("en-IN", { year: "numeric", day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(orderPlacedAt)}</td>
+          <td>{orderPlacedBy}</td>
+          <td>{fuelStationName}</td>
+          <td>{quantity} L</td>
+          <td>{upperFirst(fuel)}</td>
+          <td>Rs. {totalAmount}</td>
+        </tr>
+      );
+    }
   });
 
   return (
@@ -75,6 +81,7 @@ const Vendor = () => {
                   <tr>
                     <th>Order Placed At</th>
                     <th>Order Placed By</th>
+                    <th>Fuel Station</th>
                     <th>Quantity</th>
                     <th>Fuel Type</th>
                     <th>Total Amount</th>
