@@ -27,12 +27,6 @@ const Home = ({ totalViews }) => {
     }
   };
 
-  useEffect(() => {
-    const views = localStorage.getItem("views");
-    localStorage.setItem("views", views + 2);
-    console.log(localStorage.getItem("views"));
-  }, []);
-
   // useEffect(() => {
   //   const updateViews = async () => {
   //     await update(ref(rtdb, "totalviews"), {

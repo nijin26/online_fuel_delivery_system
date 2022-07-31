@@ -1,8 +1,8 @@
 // Library Imports
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Burger, Drawer, Container, Paper, SimpleGrid, Text, NavLink, useMantineColorScheme, SegmentedControl, Group, Center, Box } from "@mantine/core";
-import { LayoutDashboard, News, Message, SunHigh, Moon } from "tabler-icons-react";
+import { RingProgress, Burger, Drawer, Container, Paper, SimpleGrid, Text, NavLink, useMantineColorScheme, SegmentedControl, Group, Center, Box } from "@mantine/core";
+import { LayoutDashboard, News, Message, SunHigh, Moon, ArrowUpRight } from "tabler-icons-react";
 
 // Local File Imports
 import { toggleNavs } from "../../app/userSlice";
@@ -54,6 +54,41 @@ const Admin = () => {
     return <NavLink my={"lg"} key={item.label} active={index === selectedMenu} label={item.label} icon={<item.icon size={24} stroke={1.5} fill={colorScheme === "dark" ? "white" : "black"} />} onClick={() => setSelectedMenu(index)} />;
   });
 
+  const data = [
+    { label: "Total Website Visits", progress: 40, color: "green", stats: localStorage.getItem("views") },
+    { label: "Total Users", progress: 50, color: "blue", stats: counts.customers + counts.deliverystaffs + counts.vendors },
+    { label: "Total Orders", progress: 30, color: "pink", stats: 10 },
+  ];
+
+  const stats = data.map((stat) => {
+    return (
+      <Paper withBorder radius="md" p="xs" key={stat.label}>
+        <Group>
+          <RingProgress
+            size={80}
+            roundCaps
+            thickness={8}
+            sections={[{ value: stat.progress, color: stat.color }]}
+            label={
+              <Center>
+                <ArrowUpRight size={22} stroke={1.5} />
+              </Center>
+            }
+          />
+
+          <div>
+            <Text color="dimmed" size="xs" transform="uppercase" weight={700}>
+              {stat.label}
+            </Text>
+            <Text weight={700} size="xl">
+              {stat.stats}
+            </Text>
+          </div>
+        </Group>
+      </Paper>
+    );
+  });
+
   return (
     <Container fluid px={"0"}>
       <Paper shadow="xs" radius="0" p={"sm"} className={classes.Paper}>
@@ -72,6 +107,9 @@ const Admin = () => {
                 <StatsCard count={counts.customers} type="Customers" />
                 <StatsCard count={counts.vendors} type="Vendors" />
                 <StatsCard count={counts.deliverystaffs} type="Delivery Staffs" />
+              </SimpleGrid>
+              <SimpleGrid cols={3} breakpoints={[{ maxWidth: "sm", cols: 1 }]} my="xl">
+                {stats}
               </SimpleGrid>
             </div>
           )}

@@ -49,6 +49,11 @@ function App() {
   };
 
   useEffect(() => {
+    const views = localStorage.getItem("views");
+    localStorage.setItem("views", parseInt(views) + 1);
+  }, []);
+
+  useEffect(() => {
     onAuthStateChanged(auth, (userAuth) => {
       if (userAuth) {
         // user is logged in, send the user's details to redux, store the current user in the state
