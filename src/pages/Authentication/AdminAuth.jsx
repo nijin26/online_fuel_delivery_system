@@ -72,7 +72,7 @@ const Authentication = (props) => {
           Welcome back to Your Online Fuel Delivery App, Login with
         </Text>
         <form onSubmit={form.onSubmit(loginHandler)}>
-          <Group direction="column" grow>
+          <Stack>
             <TextInput required label="Email" placeholder="hello@gmail.com" value={form.values.email} onChange={(event) => form.setFieldValue("email", event.currentTarget.value)} error={form.errors.email && "Invalid email"} />
             <PasswordInput
               required
@@ -82,7 +82,7 @@ const Authentication = (props) => {
               onChange={(event) => form.setFieldValue("password", event.currentTarget.value)}
               error={form.errors.password && "Password should include at least 6 characters"}
             />
-          </Group>
+          </Stack>
 
           <Group position="apart" mt="xl">
             <Stack spacing="xs">

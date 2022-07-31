@@ -28,7 +28,7 @@ const Admin = () => {
     });
   }, []);
 
-  const menuItems = menuData.map((item, index) => <NavLink key={item.label} active={index === selectedMenu} label={item.label} icon={<item.icon size={16} stroke={1.5} />} onClick={() => setSelectedMenu(index)} />);
+  const menuItems = menuData.map((item, index) => <NavLink key={item.label} active={index === selectedMenu} label={item.label} icon={<item.icon size={16} stroke={1.5} color="white" />} onClick={() => setSelectedMenu(index)} />);
 
   return (
     <Container fluid px={"0"}>
