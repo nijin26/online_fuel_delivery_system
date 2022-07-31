@@ -1,10 +1,12 @@
 // Library Imports
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { RingProgress, Burger, Drawer, Container, Paper, SimpleGrid, Text, NavLink, useMantineColorScheme, SegmentedControl, Group, Center, Box } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
+
+import { RingProgress, Burger, Drawer, Container, Paper, SimpleGrid, Text, NavLink, useMantineColorScheme, SegmentedControl, Group, Center, Box, Button } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 
-import { LayoutDashboard, News, Message, SunHigh, Moon, ArrowUpRight, TruckDelivery, GasStation, Users } from "tabler-icons-react";
+import { LayoutDashboard, News, Message, SunHigh, Moon, ArrowUpRight, TruckDelivery, GasStation, Users, Logout } from "tabler-icons-react";
 
 // Local File Imports
 import { toggleNavs, logout } from "../../app/userSlice";
@@ -22,21 +24,26 @@ import Newsletter from "./Newsletter";
 const Admin = () => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const { classes } = useStyles();
   const [open, setOpen] = useState(false);
   const [counts, setCounts] = useState({ customers: 0, vendors: 0, deliverystaffs: 0 });
   const [selectedMenu, setSelectedMenu] = useState(0);
 
-  useEffect(async () => {
-    dispatch(toggleNavs(false));
-    const customersSnapshot = await getDocs(collection(db, "customers"));
-    const vendorsSnapshot = await getDocs(collection(db, "vendors"));
-    const deliveryStaffSnapshot = await getDocs(collection(db, "deliverystaff"));
-    setCounts({
-      customers: customersSnapshot.size,
-      vendors: vendorsSnapshot.size,
-      deliverystaffs: deliveryStaffSnapshot.size,
-    });
+  useEffect(() => {
+    const collectCounts = async () => {
+      dispatch(toggleNavs(false));
+      const customersSnapshot = await getDocs(collection(db, "customers"));
+      const vendorsSnapshot = await getDocs(collection(db, "vendors"));
+      const deliveryStaffSnapshot = await getDocs(collection(db, "deliverystaff"));
+      setCounts({
+        customers: customersSnapshot.size,
+        vendors: vendorsSnapshot.size,
+        deliverystaffs: deliveryStaffSnapshot.size,
+      });
+    };
+    collectCounts();
   }, []);
 
   const handleLogout = () => {
@@ -159,6 +166,9 @@ const Admin = () => {
             ]}
           />
         </Group>
+        <Button onClick={handleLogout} fullWidth variant="outline" leftIcon={<Logout size={14} />}>
+          Logout
+        </Button>
       </Drawer>
     </Container>
   );
