@@ -18,7 +18,7 @@ const Authentication = (props) => {
 
   React.useEffect(() => console.log("I am in Vendor Page"), []);
 
-  const [type, toggle] = useToggle("login", ["login", "register"]);
+  const [type, toggle] = useToggle(["login", "register"]);
   const form = useForm({
     initialValues: {
       email: "",

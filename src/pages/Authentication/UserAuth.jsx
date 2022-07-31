@@ -16,7 +16,7 @@ const Authentication = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [type, toggle] = useToggle("login", ["login", "register"]);
+  const [type, toggle] = useToggle(["login", "register"]);
   const form = useForm({
     initialValues: {
       email: "",
@@ -155,7 +155,7 @@ const Authentication = (props) => {
         <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
         <form onSubmit={form.onSubmit(submitHandler)}>
-          <Group direction="column" grow>
+          <Stack>
             {type === "register" && <TextInput type="text" required label="Name" placeholder="Your name" value={form.values.name} onChange={(event) => form.setFieldValue("name", event.currentTarget.value)} />}
 
             <TextInput required type="email" label="Email" placeholder="hello@gmail.com" value={form.values.email} onChange={(event) => form.setFieldValue("email", event.currentTarget.value)} error={form.errors.email && "Invalid email"} />
@@ -181,7 +181,7 @@ const Authentication = (props) => {
             />
 
             {type === "register" && <Checkbox label="I accept terms and conditions" checked={form.values.terms} onChange={(event) => form.setFieldValue("terms", event.currentTarget.checked)} />}
-          </Group>
+          </Stack>
 
           <Group position="apart" mt="xl">
             <Stack spacing="xs">

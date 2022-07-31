@@ -16,7 +16,7 @@ const Authentication = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [type, toggle] = useToggle("login", ["login", "register"]);
+  const [type, toggle] = useToggle(["login", "register"]);
   const form = useForm({
     initialValues: {
       email: "",
