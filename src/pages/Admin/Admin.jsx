@@ -1,8 +1,9 @@
 // Library Imports
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Burger, Drawer, Container, Paper, SimpleGrid, Text, NavLink } from "@mantine/core";
-import { LayoutDashboard, News, Message } from "tabler-icons-react";
+import { Burger, Drawer, Container, Paper, SimpleGrid, Text, NavLink, useMantineColorScheme, SegmentedControl, Group, Center, Box } from "@mantine/core";
+import { LayoutDashboard, News, Message, SunHigh, Moon } from "tabler-icons-react";
+import { useColorScheme } from "@mantine/hooks";
 
 // Local File Imports
 import { toggleNavs } from "../../app/userSlice";
@@ -10,8 +11,9 @@ import { useStyles } from "../../styles/Admin";
 import { getDocs, collection, db } from "../../utils/firebaseConfig";
 
 const Admin = () => {
-  const { classes } = useStyles();
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dispatch = useDispatch();
+  const { classes } = useStyles();
   const [open, setOpen] = useState(false);
   const [counts, setCounts] = useState({ customers: 0, vendors: 0, deliverystaffs: 0 });
   const [selectedMenu, setSelectedMenu] = useState("");
@@ -28,7 +30,9 @@ const Admin = () => {
     });
   }, []);
 
-  const menuItems = menuData.map((item, index) => <NavLink key={item.label} active={index === selectedMenu} label={item.label} icon={<item.icon size={16} stroke={1.5} color="white" />} onClick={() => setSelectedMenu(index)} />);
+  const menuItems = menuData.map((item, index) => {
+    return <NavLink my={"lg"} key={item.label} active={index === selectedMenu} label={item.label} icon={<item.icon size={24} stroke={1.5} fill={colorScheme === "dark" ? "white" : "black"} />} onClick={() => setSelectedMenu(index)} />;
+  });
 
   return (
     <Container fluid px={"0"}>
@@ -53,6 +57,32 @@ const Admin = () => {
       </Paper>
       <Drawer size={"sm"} padding="sm" position="left" opened={open} onClose={() => setOpen((o) => !o)}>
         {menuItems}
+        <Group position="center" my="xl">
+          <SegmentedControl
+            value={colorScheme}
+            onChange={(value) => toggleColorScheme(value)}
+            data={[
+              {
+                value: "light",
+                label: (
+                  <Center>
+                    <SunHigh size={24} stroke={0.5} fill={colorScheme === "dark" ? "white" : "black"} />
+                    <Box ml={10}>Light</Box>
+                  </Center>
+                ),
+              },
+              {
+                value: "dark",
+                label: (
+                  <Center>
+                    <Moon size={24} stroke={1.5} fill={colorScheme === "dark" ? "white" : "black"} />
+                    <Box ml={10}>Dark</Box>
+                  </Center>
+                ),
+              },
+            ]}
+          />
+        </Group>
       </Drawer>
     </Container>
   );
