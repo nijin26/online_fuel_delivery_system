@@ -7,7 +7,7 @@ import { LayoutDashboard, News, Message, SunHigh, Moon, ArrowUpRight } from "tab
 // Local File Imports
 import { toggleNavs } from "../../app/userSlice";
 import { useStyles } from "../../styles/Admin";
-import { getDocs, collection, db, ref, rtdb, onValue } from "../../utils/firebaseConfig";
+import { getDocs, collection, db } from "../../utils/firebaseConfig";
 
 // Component Imports
 import Contacts from "./Contacts";
@@ -71,7 +71,7 @@ const Admin = () => {
             sections={[{ value: stat.progress, color: stat.color }]}
             label={
               <Center>
-                <ArrowUpRight size={22} stroke={1.5} />
+                <ArrowUpRight size={32} stroke={0.2} fill={colorScheme === "dark" ? "white" : "black"} />
               </Center>
             }
           />

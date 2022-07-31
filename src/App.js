@@ -5,7 +5,7 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 import { useDispatch, useSelector } from "react-redux";
 import { login, logout, selectUser, showNav } from "./app/userSlice";
-import { auth, onAuthStateChanged, rtdb, ref, onValue } from "./utils/firebaseConfig";
+import { auth, onAuthStateChanged } from "./utils/firebaseConfig";
 
 //components
 import Home from "./pages/Home";
@@ -27,8 +27,6 @@ import InvalidURL from "./pages/InvalidURL";
 import PrivateRoute from "./utils/PrivateRoute";
 
 function App() {
-  const [totalViews, setTotalViews] = React.useState();
-
   const user = useSelector(selectUser);
   const showNavigation = useSelector(showNav);
   const navigate = useNavigate();
