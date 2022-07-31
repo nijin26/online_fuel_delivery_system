@@ -15,6 +15,7 @@ import Newsletter from "./Newsletter";
 
 const Admin = () => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const [totalViews, setTotalViews] = useState();
   const dispatch = useDispatch();
   const { classes } = useStyles();
   const [open, setOpen] = useState(false);
@@ -33,18 +34,21 @@ const Admin = () => {
     });
   }, []);
 
-  useEffect(() => {
-    const fetchViews = async () => {
-      const docref = ref(rtdb, "totalviews/");
-      onValue(docref, async (snapshot) => {
-        const data = await snapshot.val()?.count;
-      });
-      console.log(data);
-      return data
-    };
-   const data = await fetchViews();
-    console.log("fetchViews is called");
-  }, []);
+  // useEffect(() => {
+  // async function fetchViews() {
+  //   const docref = ref(rtdb, "totalviews/");
+  //   let data;
+  //   onValue(docref, async (snapshot) => {
+  //     data = snapshot.val().count;
+  //   });
+  //   console.log(data);
+  //   return data;
+  // }
+  // const count = await fetchViews();
+  // console.log("fetchViews is called", count);
+  // }, []);
+
+  console.log(localStorage.getItem("views"));
 
   const menuItems = menuData.map((item, index) => {
     return <NavLink my={"lg"} key={item.label} active={index === selectedMenu} label={item.label} icon={<item.icon size={24} stroke={1.5} fill={colorScheme === "dark" ? "white" : "black"} />} onClick={() => setSelectedMenu(index)} />;
